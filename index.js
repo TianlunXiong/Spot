@@ -2,6 +2,7 @@ const Koa = require('koa');
 const serve = require('koa-static');
 const Router = require('koa-router');
 const koaBody = require('koa-body');
+const koaCompress = require('koa-compress');
 const config = require('./config');
 const app = new Koa();
 const router = new Router();
@@ -19,31 +20,42 @@ const post_handler = require('./handlers/post')
 const cors_handler = require('./handlers/cors');
 const api_handler = require('./handlers/api');
 
-app.use(serve('./develop/dist', {
-        maxage: 3600*60*1000
+
+app.use(koaCompress({
+    threshold: 500
+}))
+    .use(serve('./develop/dist', {
+        maxage: 3600 * 60 * 1000,
     }))
-    .use(koaBody({multipart:true}))
+    // .use(koaCompress({
+    //     filter(content_type){
+    //         return /application\/javascript/.test(content_type)
+    //     },
+    //     threshold: 512,
+    //     flush: require('zlib').Z_SYNC_FLUSH
+    // }))
+    .use(koaBody({ multipart: true }))
     .use(cors_handler)
     .use(cookies_handler)
     .use(session_handler)
 
-router.post('/post',post_handler);
-router.post('/update',update_handler);
-router.post('/login',login_handler);
-router.post('/logout',logout_handler);
+router.post('/post', post_handler);
+router.post('/update', update_handler);
+router.post('/login', login_handler);
+router.post('/logout', logout_handler);
 router.post('/register', register_handler);
-router.post('/delete',delete_handler);
-router.get('/find',find_handler);
-router.get('/query',query_handler);
+router.post('/delete', delete_handler);
+router.get('/find', find_handler);
+router.get('/query', query_handler);
 router.get('/api/hotnews', api_handler.hotNews);
 router.get('/api/search', api_handler.search);
-router.get('/api/answer',api_handler.answer);
-router.get('/api/comment',api_handler.comment);
-router.get('/api/agent',api_handler.agent);
+router.get('/api/answer', api_handler.answer);
+router.get('/api/comment', api_handler.comment);
+router.get('/api/agent', api_handler.agent);
 
 app.use(router.routes())
 
 console.log(process.env.NODE_ENV);
 app.listen(config.PORT, () => {
-    console.log("\033[45;32m Server has been initiated ... \033[0m","at",config.PORT)
+    console.log("\033[45;32m Server has been initiated ... \033[0m", "at", config.PORT)
 });

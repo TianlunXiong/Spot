@@ -12,12 +12,12 @@
 
         <el-container>
             <el-container>
-                <el-header height="">
+                <el-header height="" style="padding:1px">
                     <!-- Header content -->
                     <log-dialog></log-dialog>
                     <my-header></my-header>
                 </el-header>
-                <el-main height="" style="">
+                <el-main height="" style="padding:1px">
                     <router-view></router-view>
                 </el-main>
             </el-container>
@@ -100,15 +100,6 @@ export default {
     border-radius: 4px;
 }
 
-.bg-purple-dark {
-    background: #99a9bf;
-}
-.bg-purple {
-    background: #d3dce6;
-}
-.bg-purple-light {
-    background: #e5e9f2;
-}
 .grid-content {
     border-radius: 4px;
     min-height: 60px;
@@ -131,7 +122,9 @@ export default {
     font-family: "Helvetica Neue", Helvetica, "PingFang SC", "Hiragino Sans GB",
         "Microsoft YaHei", "微软雅黑", Arial, sans-serif;
 }
-
+body{
+    margin: 0;
+}
 em{
     font-style: normal;
 }

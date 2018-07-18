@@ -1,12 +1,12 @@
 <template>
     <el-card :body-style="{ padding: '5px' }" style="margin:20px 2px" shadow="hover">
         <div slot="header">
-            <span style="color:#409EFF;border:1px solid #409EFF;border-radius:4px">{{type}}</span>
+            <span style="color:white;background-color:#409EFF;border-radius:2px">{{type}}</span>
             <a class="href" target="_blank" href="javascript::void()" style="font-weight:bold" v-html="qData.highlight.title"> </a>
-            <el-button v-if="addButtonShown" type="text" @click="getMoreAnswer">
+            <el-button v-if="addButtonShown" type="text" @click="getMoreAnswer" title="更多答案">
                 <i class="el-icon-plus"></i>
             </el-button>
-            <el-button v-if="!isClose" type="text" @click="closeMe">
+            <el-button v-if="!isClose" type="text" @click="closeMe" title="折叠">
                 <i class="el-icon-minus"></i>
             </el-button>
         </div>
@@ -14,7 +14,7 @@
             <el-collapse-transition>
                 <answer v-if="isClose" :aData="qData.object"></answer>
                 <div v-else>
-                    <answer v-for="(item, index) in answerList.slice(pageStart, pageEnd)" :key="index" :aData="item"></answer>
+                    <answer v-for="(item, index) in answerList.slice(pageStart, pageEnd)" :key="index" :aData="item" :closeSignal="closeSignal"></answer>
                     <el-pagination :total="answerList.length" @prev-click="handlePrev" @next-click="handleNext" @current-change="handleCurrentChange" :page-size="5" :current-page="currentPage" layout="prev, pager, next">
                     </el-pagination>
                 </div>
@@ -37,7 +37,7 @@ export default {
             answerList: [],
             currentPage: 0,
             maxPage: 0,
-            isZhuanlan: false
+            closeSignal: true
         };
     },
     watch: {
@@ -65,17 +65,16 @@ export default {
         type() {
             switch (this.qData.object.type) {
                 case "answer":
-                    return "Q&A";
+                    return "答";
                 case "article":
                     return "专";
                 case "question":
-                    return "Q"
+                    return "问";
             }
         }
     },
     methods: {
         getMoreAnswer() {
-            console.log(this.qData);
             this.$store
                 .dispatch("search/getAnswer", {
                     questionId: this.qData.object.question.id,
@@ -84,23 +83,41 @@ export default {
                     sort_by: "default"
                 })
                 .then(json => {
-                    this.answerList.push(...json.data);
-                    this.isClose = false;
-                    this.currentPage = ++this.maxPage;
+                    if (json.data.length !== 0) {
+                        this.answerList.push(...json.data);
+                        this.isClose = false;
+                        this.currentPage = ++this.maxPage;
+                        this.closeSignal = !this.closeSignal;
+                    } else {
+                        if (this.currentPage === this.maxPage) {
+                            this.$message({
+                                message: "没有更多回答了",
+                                type: "info"
+                            });
+                        } else {
+                            this.closeSignal = !this.closeSignal;
+                            this.isClose = false;
+                            this.currentPage = 1;
+                        }
+                    }
                 });
         },
 
         handlePrev(curr) {
+            this.closeSignal = !this.closeSignal;
             this.currentPage = curr;
         },
         handleNext(curr) {
+            this.closeSignal = !this.closeSignal;
             this.currentPage = curr;
         },
         handleCurrentChange(curr) {
+            this.closeSignal = !this.closeSignal;
             this.currentPage = curr;
         },
         closeMe() {
             this.isClose = true;
+            this.currentPage = 0;
         }
     },
     components: {

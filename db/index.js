@@ -2,7 +2,7 @@ const MongoClient = require('mongodb').MongoClient
 const assert = require('assert');
 let url = '';
 console.log(process.env.NODE_ENV)
-if (process.env.NODE_ENV === 'local') {
+if (process.env.NODE_ENV === 'local'||process.env.NODE_ENV === 'development') {
     url = 'mongodb://localhost:27017';
 }
 if (process.env.NODE_ENV === 'docker') {

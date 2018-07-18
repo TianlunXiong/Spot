@@ -1,5 +1,7 @@
 {
-    "presets" : ["env","stage-3"],
+    "presets" : [["env",{
+        "modules" : false
+    }],"stage-3"],
     "plugins": [
         ["transform-runtime",{
             "helpers" : false,
@@ -7,7 +9,11 @@
             "regenerator" : true,
             "moduleName" : "babel-runtime"
         }],
-        "syntax-dynamic-import"
+        "syntax-dynamic-import",
+        ["component",{
+            "libraryName" : "element-ui",
+            "styleLibraryName" : "theme-chalk" 
+        }]
     ]
 
 }

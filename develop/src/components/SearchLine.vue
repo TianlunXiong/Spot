@@ -1,0 +1,143 @@
+<template>
+    <el-card :body-style="{ padding: '5px' }" style="margin:20px 2px" shadow="hover">
+        <div slot="header">
+            <span style="color:#409EFF;border:1px solid #409EFF;border-radius:4px">{{type}}</span>
+            <a class="href" target="_blank" href="javascript::void()" style="font-weight:bold" v-html="qData.highlight.title"> </a>
+            <el-button v-if="addButtonShown" type="text" @click="getMoreAnswer">
+                <i class="el-icon-plus"></i>
+            </el-button>
+            <el-button v-if="!isClose" type="text" @click="closeMe">
+                <i class="el-icon-minus"></i>
+            </el-button>
+        </div>
+        <div>
+            <el-collapse-transition>
+                <answer v-if="isClose" :aData="qData.object"></answer>
+                <div v-else>
+                    <answer v-for="(item, index) in answerList.slice(pageStart, pageEnd)" :key="index" :aData="item"></answer>
+                    <el-pagination :total="answerList.length" @prev-click="handlePrev" @next-click="handleNext" @current-change="handleCurrentChange" :page-size="5" :current-page="currentPage" layout="prev, pager, next">
+                    </el-pagination>
+                </div>
+            </el-collapse-transition>
+
+        </div>
+
+    </el-card>
+
+</template>
+
+<script>
+import Answer from "./Answer.vue";
+
+export default {
+    props: ["qData"],
+    data() {
+        return {
+            isClose: true,
+            answerList: [],
+            currentPage: 0,
+            maxPage: 0,
+            isZhuanlan: false
+        };
+    },
+    watch: {
+        qData(newQ, oldQ) {
+            this.isClose = true;
+            this.answerList = [];
+            this.currentPage = 0;
+            this.maxPage = 0;
+        }
+    },
+    computed: {
+        pageStart() {
+            return 5 * (this.currentPage - 1);
+        },
+        pageEnd() {
+            return 5 * this.currentPage;
+        },
+        addButtonShown() {
+            if (this.qData.object.type === "answer") {
+                return true;
+            } else {
+                return false;
+            }
+        },
+        type() {
+            switch (this.qData.object.type) {
+                case "answer":
+                    return "Q&A";
+                case "article":
+                    return "专";
+                case "question":
+                    return "Q"
+            }
+        }
+    },
+    methods: {
+        getMoreAnswer() {
+            console.log(this.qData);
+            this.$store
+                .dispatch("search/getAnswer", {
+                    questionId: this.qData.object.question.id,
+                    offset: 5 * (this.maxPage - 1),
+                    limit: 5,
+                    sort_by: "default"
+                })
+                .then(json => {
+                    this.answerList.push(...json.data);
+                    this.isClose = false;
+                    this.currentPage = ++this.maxPage;
+                });
+        },
+
+        handlePrev(curr) {
+            this.currentPage = curr;
+        },
+        handleNext(curr) {
+            this.currentPage = curr;
+        },
+        handleCurrentChange(curr) {
+            this.currentPage = curr;
+        },
+        closeMe() {
+            this.isClose = true;
+        }
+    },
+    components: {
+        Answer
+    }
+};
+</script>
+
+<style lang="scss">
+.href {
+    &:hover {
+        color: #409eff;
+    }
+    cursor: pointer;
+    color: black;
+    text-decoration: none;
+
+    em {
+        color: #f38181;
+        font-style: normal;
+    }
+}
+
+.slight-text {
+    color: rgba(#000, $alpha: 0.6);
+}
+
+.normal-text {
+    font-weight: bold;
+}
+
+.light-text {
+    color: rgba(#000, $alpha: 0.3);
+}
+
+img {
+    width: 100%;
+    max-width: 950px;
+}
+</style>

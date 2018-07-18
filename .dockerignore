@@ -1,0 +1,4 @@
+# 排除node_modules下的文件
+*/node_*/*
+*/develop/node_*/*
+*/test/*

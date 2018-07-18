@@ -20,7 +20,7 @@ const cors_handler = require('./handlers/cors');
 const api_handler = require('./handlers/api');
 
 app.use(serve('./develop/dist', {
-        maxage: 3600*60
+        maxage: 3600*60*1000
     }))
     .use(koaBody({multipart:true}))
     .use(cors_handler)

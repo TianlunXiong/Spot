@@ -1,6 +1,7 @@
 import util from '../../util'
-const des = 'dev';
-const URL = (des === 'dev') ? 'http://localhost:8080' : '';
+import config from '../../config'
+
+const URL = config.URL;
 
 export default  {
     namespaced: true,

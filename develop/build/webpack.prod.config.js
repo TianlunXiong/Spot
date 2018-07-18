@@ -6,7 +6,7 @@ var BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlug
 module.exports = {
     entry : {
         entry : "./src/entry.js",
-        vendor:['vue-awesome-swiper']
+        vendors: ["vue-quill-editor"]
     },
     output:{
         filename: "[name].[chunkhash].js",

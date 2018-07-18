@@ -1,6 +1,14 @@
 const request = require('superagent');
 const cheerio = require('cheerio');
 
+let URL = '';
+if(process.env.NODE_ENV === 'local'){
+    URL = '';
+}
+if(process.env.NODE_ENV === 'development'){
+    URL = 'http://localhost:8080'
+}
+
 const API = {
     ZHIHU: {
         SEARCH: "https://www.zhihu.com/api/v4/search_v3",
@@ -109,7 +117,7 @@ function imageFilter(data) {
                             src = $(this).attr('data-thumbnail')
                         }
                     }
-                    $(this).attr('src', `http://localhost:8080/api/agent?url=${src}`)
+                    $(this).attr('src', `${URL}/api/agent?url=${src}`)
 
                 })
 
@@ -143,7 +151,7 @@ function imageFilter_answer(data) {
                         src = $(this).attr('data-thumbnail')
                     }
                 }
-                $(this).attr('src', `http://localhost:8080/api/agent?url=${src}`)
+                $(this).attr('src', `${URL}/api/agent?url=${src}`)
 
             })
 

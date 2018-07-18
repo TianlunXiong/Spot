@@ -29,6 +29,7 @@
 </template>
 
 <script>
+import config from '../config'
 export default {
     props: ["aData"],
     data() {
@@ -43,7 +44,7 @@ export default {
     },
     methods: {
         proxy(url) {
-            return `http://localhost:8080/api/agent?url=${url}`;
+            return `${config.URL}/api/agent?url=${url}`;
         }
     }
 };

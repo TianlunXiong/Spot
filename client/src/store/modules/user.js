@@ -24,7 +24,7 @@ export default {
         getArticle (context) {
             util.getData(URL + "/find")
                 .then(json => {
-                    context.commit("ARTICLE_ASSIGN", json.state.articles);
+                    context.commit("ARTICLE_ASSIGN", json.state.success ? json.state.articles : []);
                 });
         },
         resetArticle (context) {

@@ -73,8 +73,8 @@ export default {
                 });
                 break;
             case "4":
-                // this.$store.dispatch('setSearchBarVisible',!this.$store.state.searchBarVisible)
                 this.$store.dispatch("searchBar", "toggle");
+                this.$router.push({name: "search"});
             }
         },
         toUser () {

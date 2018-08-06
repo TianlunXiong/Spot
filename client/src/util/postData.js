@@ -1,4 +1,4 @@
-export default function postData (url, data) {
+export default function (url, data) {
     const formData = new FormData();
 
     Object.keys(data).forEach(key => {

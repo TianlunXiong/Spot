@@ -2,8 +2,13 @@
 
     <el-container>
         <el-main height="800px">
-            <!-- Main content -->
-            <router-view></router-view>
+            <el-row>
+                <el-col :md="6">&nbsp;</el-col>
+                <el-col :md="12" :xs="24">
+                     <router-view></router-view>
+                </el-col>
+                <el-col :md="6">&nbsp;</el-col>
+            </el-row>
         </el-main>
     </el-container>
 
@@ -15,10 +20,6 @@ export default {
         return {
             pathAllowed: [this.$store.state.user.name, "profile", "articles"]
         };
-    },
-    methods: {},
-    beforeRouteEnter (to, from, next) {
-        next();
     },
     beforeRouteUpdate (to, from, next) {
         if (this.$store.state.user.isLogin) {

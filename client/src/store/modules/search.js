@@ -7,12 +7,14 @@ export default {
     namespaced: true,
 
     state: {
+        searchText: "",
         hotTopic: {
             zhihu: []
         },
         searchBuffer: {
             zhihu: []
-        }
+        },
+        initialSignal: true
     },
     getters: {
         searchBufferDone (state) {
@@ -50,6 +52,12 @@ export default {
             return util.getData(URL + `/api/answer?questionId=${params.questionId}&offset=${params.offset}&limit=${params.limit}&sort_by=${params.sortBy}`).then(json => {
                 return json;
             });
+        },
+        setSearchText (context, params) {
+            context.commit("SET_SEARCH_TEXT", params);
+        },
+        emitInitialSignal (context) {
+            context.commit("EMIT_INITIAL_SIGNAL");
         }
     },
     mutations: {
@@ -61,6 +69,12 @@ export default {
         },
         SEARCH_BUFFER_ADD (state, load) {
             state.searchBuffer.zhihu.push(...load.data);
+        },
+        SET_SEARCH_TEXT (state, load) {
+            state.searchText = load;
+        },
+        EMIT_INITIAL_SIGNAL (state) {
+            state.initialSignal = !state.initialSignal;
         }
     }
 };

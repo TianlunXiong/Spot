@@ -2,7 +2,7 @@
     <el-card :body-style="{ padding: '5px' }" style="margin:20px 2px" shadow="hover">
         <div slot="header">
             <span style="color:white;background-color:#409EFF;border-radius:2px">{{type}}</span>
-            <a class="href" target="_blank" href="javascript::void()" style="font-weight:bold" v-html="qData.highlight.title"> </a>
+            <a class="href" style="font-weight:bold" v-html="qData.highlight.title"> </a>
             <el-button v-if="addButtonShown" type="text" style="color:rgba(0,0,0,0.5)" @click="getMoreAnswer" title="更多答案">
                 <i class="el-icon-plus"></i>
             </el-button>
@@ -14,16 +14,13 @@
             <el-collapse-transition>
                 <answer v-if="isClose" :aData="qData.object"></answer>
                 <div v-else>
-                    <answer v-for="(item, index) in answerList.slice(pageStart, pageEnd)" :key="index" :aData="item" :closeSignal="closeSignal"></answer>
+                    <answer v-for="(item, index) in answerList.slice(pageStart, pageEnd)" :key="index" :aData="item"></answer>
                     <el-pagination :total="answerList.length" @prev-click="handlePrev" @next-click="handleNext" @current-change="handleCurrentChange" :page-size="5" :current-page="currentPage" layout="prev, pager, next">
                     </el-pagination>
                 </div>
             </el-collapse-transition>
-
         </div>
-
     </el-card>
-
 </template>
 
 <script>
@@ -36,8 +33,7 @@ export default {
             isClose: true,
             answerList: [],
             currentPage: 0,
-            maxPage: 0,
-            closeSignal: true
+            maxPage: 0
         };
     },
     watch: {
@@ -97,22 +93,23 @@ export default {
                         } else {
                             this.closeSignal = !this.closeSignal;
                             this.isClose = false;
-                            this.currentPage = 1;
+                            this.currentPage = this.maxPage;
                         }
                     }
+                    this.$store.dispatch("search/emitInitialSignal");
                 });
         },
 
         handlePrev (curr) {
-            this.closeSignal = !this.closeSignal;
+            this.$store.dispatch("search/emitInitialSignal");
             this.currentPage = curr;
         },
         handleNext (curr) {
-            this.closeSignal = !this.closeSignal;
+            this.$store.dispatch("search/emitInitialSignal");
             this.currentPage = curr;
         },
         handleCurrentChange (curr) {
-            this.closeSignal = !this.closeSignal;
+            this.$store.dispatch("search/emitInitialSignal");
             this.currentPage = curr;
         },
         closeMe () {

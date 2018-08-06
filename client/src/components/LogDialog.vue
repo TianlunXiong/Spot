@@ -1,7 +1,9 @@
 <template>
     <el-dialog :visible ="$store.state.loginDialogVisble"  :fullscreen="full" :width="width"  @close="handlerClose" center>
         <div slot="title">
-            <i style="font-size:1.6em;">IT'S ABOUT TIME</i>
+            <el-badge :value="'点击我快速体验'">
+                <el-button type="text" style="font-size:2em;color:gold;border:none;font-style:italic" @click="testLogin" :disabled="disableButton">Spot</el-button>
+            </el-badge>
         </div>
         <el-tabs v-model="activeDialog" :stretch="true">
             <el-tab-pane label="登 陆" name="login">
@@ -35,8 +37,7 @@
         </el-tabs>
         <span slot="footer">
             <el-button @click="resetForm">重 置</el-button>
-            <!-- <span style="margin:0 70px"></span> -->
-            <el-button type="primary" @click="submitForm">提 交{{scWidth}}</el-button>
+            <el-button type="primary" @click="submitForm" :disabled="disableButton">提 交</el-button>
         </span>
     </el-dialog>
 </template>
@@ -72,7 +73,7 @@ export default {
         };
 
         var nameValidator = (rule, value, callback) => {
-            if (!new RegExp(/^[A-Za-z][0-9A-Za-z\-_]{0,15}$/).test(value)) {
+            if (!new RegExp(/^([A-Za-z\u4e00-\u9fa5])[0-9A-Za-z\-_\u4e00-\u9fa5]{0,15}$/).test(value)) {
                 return callback(
                     new Error(
                         "字母开头且仅能包含字母,下划线与数字，不超过16个字符"
@@ -162,20 +163,31 @@ export default {
                     passwordC: ""
                 }
             },
-            activeDialog: "login"
+            activeDialog: "login",
+            disableButton: false
         };
     },
-    computed:{
-        full(){
-            return (window.innerWidth <= 768)?true:false
+    computed: {
+        full () {
+            return (window.innerWidth <= 768) === true;
         },
-        width(){
-            return (window.innerWidth <= 768)?"100%":"30%"
+        width () {
+            return (window.innerWidth <= 768) ? "100%" : "30%";
         }
     },
     methods: {
         handlerClose () {
             this.$store.dispatch("loginDialog", "close");
+        },
+        testLogin () {
+            new Promise((resolve, reject) => {
+                this.ruledForm.login.email = "testuser@spot.com";
+                this.ruledForm.login.password = 123123123;
+                this.activeDialog = "login";
+                resolve();
+            }).then(() => {
+                this.submitForm();
+            });
         },
         resetForm () {
             switch (this.activeDialog) {
@@ -194,6 +206,7 @@ export default {
             case "login":
                 this.$refs["logForm"].validate(valid => {
                     if (valid) {
+                        this.disableButton = true;
                         this.$store
                             .dispatch("user/login", {
                                 "e-mail": this.ruledForm.login.email,
@@ -231,9 +244,11 @@ export default {
                                         duration: 2000
                                     });
                                 }
+                            })
+                            .then(() => {
+                                this.disableButton = false;
                             });
                     } else {
-                        // console.log("error submit");
                         return false;
                     }
                 });
@@ -241,6 +256,7 @@ export default {
             case "register":
                 this.$refs["regForm"].validate(valid => {
                     if (valid) {
+                        this.disableButton = true;
                         this.$store
                             .dispatch("user/register", {
                                 "e-mail": this.ruledForm.register.email,
@@ -314,9 +330,11 @@ export default {
                                         duration: 2000
                                     });
                                 }
+                            })
+                            .then(() => {
+                                this.disableButton = false;
                             });
                     } else {
-                        // console.log("error submit");
                         return false;
                     }
                 });

@@ -1,7 +1,8 @@
 <template>
     <div v-loading="!this.$store.state.user.articleFinished">
         <el-row>
-            <el-col :lg="24">
+            <el-col :md="4">&nbsp;</el-col>
+            <el-col :md="16" :xs="24">
                 <template v-if="!this.$store.state.user.articleFinished">
                     <div style="height:400px"></div>
                 </template>
@@ -20,7 +21,7 @@
                     </div>
                 </template>
             </el-col>
-            <el-col :lg="0"></el-col>
+            <el-col :md="4">&nbsp;</el-col>
         </el-row>
     </div>
 </template>

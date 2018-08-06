@@ -18,6 +18,7 @@ import "element-ui/lib/theme-chalk/base.css";
 import {
     Pagination,
     Dialog,
+    Badge,
     Menu,
     Submenu,
     MenuItem,
@@ -57,6 +58,7 @@ Vue.use(Pagination);
 Vue.use(Dialog);
 Vue.use(Menu);
 Vue.use(Submenu);
+Vue.use(Badge);
 Vue.use(MenuItem);
 Vue.use(MenuItemGroup);
 Vue.use(Input);

@@ -1,6 +1,5 @@
 <template>
     <el-container>
-
         <el-aside width="65px" v-show="$store.state.asideVisible">
             <!-- Aside content -->
             <el-collapse-transition name="aside">
@@ -23,9 +22,9 @@
                 </el-main>
             </el-container>
         </el-container>
-        <div style="position:fixed;bottom:5px;right:28px;">
-            <el-button @click="scrollToTop" class="el-icon-caret-top" style="padding:3px 20px;"></el-button>
-        </div>
+        <transition name="el-fade-in">
+            <el-button v-show="isShow" @click="scrollToTop" class="el-icon-caret-top" style="position:fixed;bottom:5px;right:28px;border:none;padding:3px 20px;background-color:rgba(255,255,255,0)"></el-button>
+        </transition>
     </el-container>
 </template>
 
@@ -34,10 +33,11 @@
 import MyAside from "./components/MyAside.vue";
 import LogDialog from "./components/LogDialog.vue";
 import MyHeader from "./components/MyHeader.vue";
+
 export default {
     data () {
         return {
-            lengthScroll: document.documentElement.scrollTop
+            lengthScroll: 0
         };
     },
     computed: {
@@ -56,6 +56,9 @@ export default {
                 left: 0,
                 behavior: "smooth"
             });
+        },
+        scrollHandler () {
+            this.lengthScroll = document.documentElement.scrollTop;
         }
     },
     created () {
@@ -70,9 +73,7 @@ export default {
                 // console.log("登陆成功");
                 this.$store.dispatch("user/userUpdate", json.state.user);
                 this.$store.dispatch("user/getArticle").then(() => {
-                    setTimeout(() => {
-                        this.$store.dispatch("user/updateArticleState", true);
-                    }, 350);
+                    this.$store.dispatch("user/updateArticleState", true);
                 });
             } else {
                 // console.log("登陆失败");
@@ -81,7 +82,9 @@ export default {
             }
         });
     },
-
+    mounted () {
+        window.addEventListener("scroll", this.scrollHandler);
+    },
     components: {
         MyAside,
         MyHeader,
@@ -123,7 +126,8 @@ export default {
         "Microsoft YaHei", "微软雅黑", Arial, sans-serif;
 }
 body{
-    margin: 0;
+    margin-right: 4px;
+    margin-left: 4px;
 }
 em{
     font-style: normal;

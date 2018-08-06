@@ -17,15 +17,15 @@ export default {
     mutations: {
         ARTICLE_BUFFER_ASSIGN (state, articleBuffer) {
             if (articleBuffer.title) {
-                state.article_buffer.title = articleBuffer.title;
+                state.articleBuffer.title = articleBuffer.title;
             }
             if (articleBuffer.content) {
-                state.article_buffer.content = articleBuffer.content;
+                state.articleBuffer.content = articleBuffer.content;
             }
         },
         ARTICLE_BUFFER_RESET (state) {
-            state.article_buffer.title = "";
-            state.article_buffer.content = "";
+            state.articleBuffer.title = "";
+            state.articleBuffer.content = "";
         }
     }
 };

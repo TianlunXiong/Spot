@@ -7,26 +7,16 @@
                         <span class="el-icon-menu" style="color:white;margin-top:12px;margin-left:12px"></span>
                     </div>
                     <span class="slide-shine" style="font-style:italic;line-height:40px;font-size:24px;color:gold">Spot</span>
-                    <el-switch style="position:absolute;top:0px;right:5px;height:40px;" :value="login" active-color="#13ce66" inactive-color="#ff4949" @change="notify">
+                    <el-switch style="position:absolute;top:0px;right:5px;height:40px;" :value="login" active-color="#13ce66" inactive-color="#C0CCDA" @change="notify" :disabled="isLogouting">
                     </el-switch>
                 </div>
             </el-col>
         </el-row>
-        <transition name="el-zoom-in-top">
-            <el-row v-show="$store.state.searchBarVisible">
-                <el-col :md="4" :xs="0">&nbsp;</el-col>
-                <el-col :md="16" :xs="24">
-                        <el-input v-model="searchText" placeholder="在知乎搜索" clearable>
-                            <el-button  slot="append" icon="el-icon-search"  @click="getSearchNews"></el-button>
-                        </el-input>
-                </el-col>
-                <el-col :md="4" :xs="0">&nbsp;</el-col>
-            </el-row>
-        </transition>
         <el-row>
-            <el-alert v-show="showOperationButton()" :title="`您正在编辑随笔: ${$store.state.editor.articleBuffer.title}`" :closable="false" type="info" show-icon></el-alert>
+            <el-col :md="6" :xs="24">
+                <el-alert v-show="showOperationButton()" :title="`您正在编辑随笔: ${$store.state.editor.articleBuffer.title}`" :closable="false" type="info" show-icon></el-alert>
+            </el-col>
         </el-row>
-
         <el-row>
             <el-col :md="4"  :xs="0" >&nbsp;</el-col>
             <el-col :md="16"  :xs="24">
@@ -38,23 +28,15 @@
                         </el-carousel-item>
                     </el-carousel>
                 </div>
-                <el-collapse-transition>
-                    <el-card :body-style="{ padding: '0px' }" style="margin-top:5px" v-show="showSearch">
-                        <div slot="header">
-                            <span style="color:rgba(0,0,0,0.5)">{{searchTextHide}}</span>
-                            <el-button type="text" style="padding:3px;color:rgba(0,0,0,0.5)" class="el-icon-plus" @click="addSearch"></el-button>
-                            <el-button type="danger" class="el-icon-close" @click="cancelSearch" style="float:right;padding:3px"></el-button>
-                        </div>
-                        <search-line v-for="(item, index) in $store.getters['search/searchBufferDone'].slice( pageStart, pageEnd)" :key="index" :qData="item"></search-line>
-                        <div>
-                            <el-pagination  :current-page="currentPage" layout="prev, pager, next" @next-click="handleNext" @prev-click="handlePrev" @current-change="handleCurrentChange" :page-size="5" :total="$store.getters['search/searchBufferDone'].length">
-                            </el-pagination>
-                            <div style="float:right">
-                                <el-button type="text" style="padding:6px;color:rgba(0,0,0,0.5)" class="el-icon-plus" @click="addSearch"></el-button>
-                            </div>
-                        </div>
-                    </el-card>
-                </el-collapse-transition>
+                <transition name="el-zoom-in-top">
+                    <el-form @submit.native.prevent="getSearchNews" v-show="$store.state.searchBarVisible">
+                        <el-form-item >
+                            <el-input  v-model="searchText" placeholder="在知乎搜索" clearable>
+                             <el-button slot="append" icon="el-icon-search"  @click="getSearchNews"></el-button>
+                             </el-input>
+                        </el-form-item>
+                    </el-form>
+                </transition>
             </el-col>
             <el-col :md="4" :xs="0">&nbsp;</el-col>
         </el-row>
@@ -63,16 +45,12 @@
 </template>
 
 <script>
-import SearchLine from "./SearchLine.vue";
-import { setTimeout } from "timers";
+
 export default {
     data () {
         return {
             searchText: "",
-            searchTextHide: "",
-            showSearch: false,
-            currentPage: 1,
-            maxPage: 1
+            isLogouting: false
         };
     },
     computed: {
@@ -82,20 +60,11 @@ export default {
             } else {
                 return false;
             }
-        },
-        pageStart () {
-            return 5 * (this.currentPage - 1);
-        },
-        pageEnd () {
-            return 5 * this.currentPage;
         }
     },
     methods: {
         toggleAsideBar () {
             this.$store.dispatch("aside", "toggle");
-        },
-        cancelSearch () {
-            this.showSearch = false;
         },
         searchHotTopic (topic) {
             this.$store
@@ -106,58 +75,35 @@ export default {
                     limit: 5
                 })
                 .then(() => {
-                    this.searchTextHide = topic;
-                    this.showSearch = true;
-                    this.currentPage = 1;
-                    this.maxPage = 1;
+                    this.$store.dispatch("search/setSearchText", topic).then(() => {
+                        this.$router.push("/search");
+                    });
                 });
         },
         getHotNews  () {
-            this.$store.dispatch("search/getHotNews").then(() => {});
+            this.$store.dispatch("search/getHotNews");
         },
         getSearchNews  () {
-            this.$store
-                .dispatch("search/searchNews", {
-                    keyWords: this.searchText,
-                    type: "general",
-                    offset: 0,
-                    limit: 5
-                })
-                .then(() => {
-                    this.showSearch = true;
-                    this.searchTextHide = this.searchText;
-                    this.currentPage = 1;
-                    this.maxPage = 1;
-                });
-        },
-        addSearch  () {
-            this.$store
-                .dispatch("search/addSearch", {
-                    name: "zhihu",
-                    keyWords: this.searchTextHide,
-                    type: "general",
-                    offset: 5 * this.maxPage,
-                    limit: 5
-                })
-                .then(r => {
-                    if (r !== 0) {
-                        this.currentPage = ++this.maxPage;
-                    } else {
-                        this.$message({
-                            message: "已经是最后一页啦!",
-                            type: "info"
+            if (this.searchText.search(/^ *$/g) === -1) {
+                this.$store
+                    .dispatch("search/searchNews", {
+                        keyWords: this.searchText,
+                        type: "general",
+                        offset: 0,
+                        limit: 5
+                    })
+                    .then(() => {
+                        this.$store.dispatch("search/setSearchText", this.searchText).then(() => {
+                            this.$router.push("/search");
                         });
-                    }
+                    });
+            } else {
+                this.$message({
+                    message: "无效搜索",
+                    type: "info",
+                    duration: 750
                 });
-        },
-        handleNext (curr) {
-            this.currentPage = curr;
-        },
-        handlePrev (curr) {
-            this.currentPage = curr;
-        },
-        handleCurrentChange (curr) {
-            this.currentPage = curr;
+            }
         },
         showLoginDialog () {
             this.$store.dispatch("loginDialog", "open");
@@ -175,6 +121,7 @@ export default {
         },
         notify (value) {
             if (value === false) {
+                this.isLogouting = true;
                 this.$store
                     .dispatch("user/logout", {
                         username: this.$store.state.user.name
@@ -200,14 +147,14 @@ export default {
                                 location.reload();
                             }, 750);
                         }
+                    })
+                    .then(() => {
+                        this.isLogouting = false;
                     });
             } else {
                 this.$store.dispatch("loginDialog", "open");
             }
         }
-    },
-    components: {
-        SearchLine
     }
 };
 </script>

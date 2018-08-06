@@ -71,13 +71,13 @@ export default {
             return util.postData(URL + "/post", load);
         },
         posj (context, load) {
-            return util.postData_json(URL + "/post", load);
+            return util.postDataJson(URL + "/post", load);
         },
         update (context, load) {
-            return util.postData_json(URL + "/update", load);
+            return util.postDataJson(URL + "/update", load);
         },
         delete (context, load) {
-            return util.postData_json(URL + "/delete", load);
+            return util.postDataJson(URL + "/delete", load);
         },
         register (context, load) {
             return util.postData(URL + "/register", load);

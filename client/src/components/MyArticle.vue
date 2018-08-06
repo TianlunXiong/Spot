@@ -2,14 +2,19 @@
     <el-row style="margin-bottom: 5px">
         <el-col :span="24" class="shadow">
             <el-card :body-style="{ padding: '20px' }" shadow="hover" class="ql-snow">
-                <div slot="header">
+                <div slot="header" style="position:relative">
                     <span style="font-size:24px;font-weight:700">{{post.title}}</span>
-                    <el-button :class="{'el-icon-arrow-left' : isWrapped, 'el-icon-arrow-down':!isWrapped}" style="float:right;padding:5px 20px;border:none" @click="readMe">
+                    <el-button :class="{'el-icon-arrow-left' : isWrapped, 'el-icon-arrow-down':!isWrapped}" style="position:absolute;transform:translateY(-50%);top:50%;right:0;padding:5px;border:none" @click="ShowAll">
                     </el-button>
                 </div>
-                <div v-html="post.content" class="ql-editor quill-editor ql-containers  ft-body" style="min-height:200px;word-break:break-all" :class="{contentWrapped: isWrapped}">
+                <div v-html="post.content" class="ql-editor quill-editor ql-containers constrain" :class="{ 'uncover' : !isWrapped }" style="transition: max-height 0.5s ease">
                 </div>
+                            <div style="text-align:center;">
+            <el-button :class="!isWrapped?'el-icon-caret-top':'el-icon-minus'" style="border:none;padding: 3px 120px;margin-top:10px" @click="ShowAll">
+            </el-button>
+            </div>
             </el-card>
+
         </el-col>
     </el-row>
 </template>
@@ -19,20 +24,11 @@ export default {
     props: ["post", "number"],
     data () {
         return {
-            isUserCollection: false,
-            isCommentsShow: false,
             isWrapped: true
         };
     },
-    computed: {
-        starIcon () {
-            return this.isUserCollection
-                ? "el-icon-star-on"
-                : "el-icon-star-off";
-        }
-    },
     methods: {
-        readMe () {
+        ShowAll () {
             this.isWrapped = !this.isWrapped;
         }
     }
@@ -45,19 +41,13 @@ export default {
     font-size: 1.8em;
 }
 
-.ft-body {
-    font-size: 1.4em;
-    overflow: hidden;
-}
-div img {
-    height: 40px;
-    width: 40px;
-    border-radius: 20px;
-}
-
-.contentWrapped {
+.constrain{
     max-height: 200px;
     overflow: hidden;
+}
+
+.uncover{
+    max-height: 5000px;
 }
 
 </style>

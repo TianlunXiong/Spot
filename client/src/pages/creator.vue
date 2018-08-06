@@ -53,8 +53,8 @@ export default {
         };
     },
     created () {
-        this.title = this.$store.state.editor.article_buffer.title;
-        this.content = this.$store.state.editor.article_buffer.content;
+        this.title = this.$store.state.editor.articleBuffer.title;
+        this.content = this.$store.state.editor.articleBuffer.content;
     },
     computed: {
         textLength () {
@@ -152,7 +152,6 @@ export default {
                             center: true
                         });
                         this.handleCancel();
-                        this.$router.replace({ name: "articles" });
                     } else {
                         this.$message({
                             message: "修改失败",
@@ -181,7 +180,7 @@ export default {
             this.title = "";
             this.content = "";
             this.$store.dispatch("editor/resetArticleBuffer").then(() => {
-                this.$router.replace({ name: "articles" });
+                this.$router.go(-1);
             });
         }
     }

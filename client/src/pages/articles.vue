@@ -46,7 +46,7 @@ export default {
                 this.$store.dispatch("user/getArticle").then(() => {
                     setTimeout(() => {
                         this.$store.dispatch("user/updateArticleState", true);
-                    }, 350);
+                    }, 100);
                 });
             });
         },

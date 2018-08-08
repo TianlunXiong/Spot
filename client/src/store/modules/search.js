@@ -53,6 +53,11 @@ export default {
                 return json;
             });
         },
+        getComment (context, params) {
+            return util.getData(URL + `/api/comment?answerId=${params.answerId}&type=${params.type}&offset=${params.offset}&limit=${params.limit}&order=${params.order}`).then(json => {
+                return json;
+            });
+        },
         setSearchText (context, params) {
             context.commit("SET_SEARCH_TEXT", params);
         },

@@ -41,14 +41,14 @@ module.exports = {
 
     async comment(ctx, next) {
         ctx.set('Content-Type', 'application/json');
-        console.log("hi")
         await engine.zhihu.comment({
             answerId: ctx.query.answerId,
             offset: ctx.query.offset,
             limit: ctx.query.limit,
-            order: ctx.query.order
+            order: ctx.query.order,
+            type: ctx.query.type
         }).then(r => {
-            ctx.body = r;
+            ctx.body = r || "没有"
         })
 
         await next();

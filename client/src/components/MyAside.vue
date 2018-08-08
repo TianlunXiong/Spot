@@ -1,25 +1,19 @@
 <template>
-    <el-row>
+    <el-row >
         <el-col :span="24">
-            <el-menu mode="vertical" :default-active="'1'" @select="handleSelect" :collapse="true">
-                <el-menu-item index="1">
-                    &nbsp;
-                    <i class="iconfont icon-cus-home"></i>
+            <el-menu background-color="#7F2EB3" text-color="gold" active-text-color="white" style="border-top:2px solid gold;margin-right:9px;margin-left:1px"  mode="verticle" :default-active="'1'" @select="handleSelect" :collapse="false" >
+                <el-menu-item index="1" class="iconfont icon-cus-home">
+                    主页
                 </el-menu-item>
-                <el-menu-item index="2">
-                    &nbsp;
-                    <i class="iconfont icon-cus-creator"></i>
+                <el-menu-item index="2" class="iconfont icon-cus-creator">
+                    随笔
                 </el-menu-item>
 
                 <el-submenu index="3">
                     <template slot="title">
-                        &nbsp;
-                        <i class="iconfont icon-cus-user"></i>
+                        <span class="iconfont icon-cus-user" style="color:gold;font-size:16px"> 我的</span>
                     </template>
                     <el-menu-item index="3-1">
-                        <!-- <div class="light-bgc" @click="toUser">
-                            <img src="../assets/user2.svg" alt="">
-                        </div> -->
                         <span>用户信息</span>
                     </el-menu-item>
                     <el-menu-item index="3-2">
@@ -27,9 +21,8 @@
                     </el-menu-item>
                 </el-submenu>
 
-                <el-menu-item index="4">
-                        &nbsp;
-                        <i class="iconfont icon-cus-sousuo"></i>
+                <el-menu-item index="4" class="iconfont icon-cus-sousuo">
+                        发现
                 </el-menu-item>
             </el-menu>
         </el-col>
@@ -76,6 +69,7 @@ export default {
                 this.$store.dispatch("searchBar", "toggle");
                 this.$router.push({name: "search"});
             }
+            this.$store.dispatch("aside", "toggle");
         },
         toUser () {
             return new Promise((resolve, reject) => {
@@ -113,5 +107,8 @@ export default {
 .switch-log {
     line-height: 64px;
     height: 64px;
+}
+.el-menu{
+    border: none;
 }
 </style>

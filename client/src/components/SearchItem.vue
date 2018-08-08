@@ -3,12 +3,8 @@
         <div slot="header">
             <span style="color:white;background-color:#409EFF;border-radius:2px">{{type}}</span>
             <a class="href" style="font-weight:bold" v-html="qData.highlight.title"> </a>
-            <el-button v-if="addButtonShown" type="text" style="color:rgba(0,0,0,0.5)" @click="getMoreAnswer" title="更多答案">
-                <i class="el-icon-plus"></i>
-            </el-button>
-            <el-button v-if="!isClose" type="text" style="color:rgba(0,0,0,0.5)" @click="closeMe" title="折叠">
-                <i class="el-icon-minus"></i>
-            </el-button>
+            <el-button :loading="isLoading" v-if="addButtonShown" type="text" style="color:rgba(0,0,0,0.5)" @click="getMoreAnswer" title="更多答案" icon="el-icon-plus"></el-button>
+            <el-button v-if="!isClose" type="text" style="color:rgba(0,0,0,0.5)" @click="closeMe" title="折叠" icon="el-icon-minus"></el-button>
         </div>
         <div>
             <el-collapse-transition>
@@ -33,7 +29,8 @@ export default {
             isClose: true,
             answerList: [],
             currentPage: 0,
-            maxPage: 0
+            maxPage: 0,
+            isLoading: false
         };
     },
     watch: {
@@ -71,6 +68,7 @@ export default {
     },
     methods: {
         getMoreAnswer () {
+            this.isLoading = true;
             this.$store
                 .dispatch("search/getAnswer", {
                     questionId: this.qData.object.question.id,
@@ -97,6 +95,9 @@ export default {
                         }
                     }
                     this.$store.dispatch("search/emitInitialSignal");
+                })
+                .then(() => {
+                    this.isLoading = false;
                 });
         },
 

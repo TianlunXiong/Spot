@@ -4,10 +4,9 @@ module.exports = async function cors_handler(ctx, next) {
     //比如 http://localhost:3500
     allowences = new Set()
         .add("http://localhost:8081")
-        .add("https://www.baidu.com")
     //.add("other else you want")
-    ctx.set('Access-Control-Allow-Credentials','true');
-    ctx.set('Access-Control-Allow-Origin',allowences.has(origin) ? origin : "")
+    ctx.response.set('Access-Control-Allow-Credentials', true);
+    ctx.response.set('Access-Control-Allow-Origin',allowences.has(origin) ? origin : "")
 
     await next();
 }

@@ -1,36 +1,37 @@
 <template>
     <el-row>
-            <el-col :md="4"  :xs="0" >&nbsp;</el-col>
-            <el-col :md="16"  :xs="24">
+            <el-col :md="8"  :xs="0" >&nbsp;</el-col>
+            <el-col :md="8"  :xs="24">
                 <el-collapse-transition>
                     <el-card :body-style="{ padding: '0px' }" style="margin-top:5px">
                         <div slot="header">
                             <span style="color:rgba(0,0,0,0.5)">{{$store.state.search.searchText}}</span>
-                            <el-button type="text" style="padding:3px;color:rgba(0,0,0,0.5)" class="el-icon-plus" @click="addSearch"></el-button>
+                            <el-button :loading="isLoading" type="text" style="padding:3px;color:rgba(0,0,0,0.5)" class="el-icon-plus" @click="addSearch"></el-button>
                         </div>
-                        <search-line v-for="(item, index) in $store.getters['search/searchBufferDone'].slice( pageStart, pageEnd)" :key="index" :qData="item"></search-line>
+                        <search-item v-for="(item, index) in $store.getters['search/searchBufferDone'].slice( pageStart, pageEnd)" :key="index" :qData="item"></search-item>
                         <div>
                             <el-pagination  :current-page="currentPage" layout="prev, pager, next" @next-click="handleNext" @prev-click="handlePrev" @current-change="handleCurrentChange" :page-size="5" :total="$store.getters['search/searchBufferDone'].length">
                             </el-pagination>
                             <div style="float:right">
-                                <el-button type="text" style="padding:6px;color:rgba(0,0,0,0.5)" class="el-icon-plus" @click="addSearch"></el-button>
+                                <el-button :loading="isLoading" type="text" style="padding:6px;color:rgba(0,0,0,0.5)" class="el-icon-plus" @click="addSearch"></el-button>
                             </div>
                         </div>
                     </el-card>
                 </el-collapse-transition>
             </el-col>
-            <el-col :md="4" :xs="0">&nbsp;</el-col>
+            <el-col :md="8" :xs="0">&nbsp;</el-col>
         </el-row>
 </template>
 
 <script>
-import SearchLine from "./SearchLine.vue";
+import SearchItem from "./SearchItem.vue";
 export default {
     data () {
         return {
             currentPage: 1,
             maxPage: 1,
-            closeSignal: true
+            closeSignal: true,
+            isLoading: false
         };
     },
     computed: {
@@ -55,6 +56,7 @@ export default {
             this.showSearch = false;
         },
         addSearch  () {
+            this.isLoading = true;
             this.$store
                 .dispatch("search/addSearch", {
                     name: "zhihu",
@@ -76,6 +78,10 @@ export default {
                             this.currentPage = this.maxPage;
                         }
                     }
+                    this.isLoading = false;
+                })
+                .catch(e => {
+                    this.isLoading = false;
                 });
         },
         handleNext (curr) {
@@ -89,7 +95,7 @@ export default {
         }
     },
     components: {
-        SearchLine
+        SearchItem
     }
 };
 </script>

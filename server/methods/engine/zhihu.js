@@ -15,6 +15,7 @@ const API = {
         QUESTION: "https://www.zhihu.com/api/v4/questions",
         TOP_TOPIC: "https://www.zhihu.com/api/v4/search/top_search",
         COMMENT: "https://www.zhihu.com/api/v4/answers",
+        COMMENT_ARTICLE: "https://www.zhihu.com/api/v4/articles",
         INCLUDE: {
             ANSWER: "data%5B*%5D.is_normal%2Cadmin_closed_comment%2Creward_info%2Cis_collapsed%2Cannotation_action%2Cannotation_detail%2Ccollapse_reason%2Cis_sticky%2Ccollapsed_by%2Csuggest_edit%2Ccomment_count%2Ccan_comment%2Ccontent%2Ceditable_content%2Cvoteup_count%2Creshipment_settings%2Ccomment_permission%2Ccreated_time%2Cupdated_time%2Creview_info%2Crelevant_info%2Cquestion%2Cexcerpt%2Crelationship.is_authorized%2Cis_author%2Cvoting%2Cis_thanked%2Cis_nothelp%3Bdata%5B*%5D.mark_infos%5B*%5D.url%3Bdata%5B*%5D.author.follower_count%2Cbadge%5B%3F(type%3Dbest_answerer)%5D.topics",
             COMMENT: "data%5B*%5D.author%2Ccollapsed%2Creply_to_author%2Cdisliked%2Ccontent%2Cvoting%2Cvote_count%2Cis_parent_author%2Cis_author"
@@ -68,15 +69,18 @@ async function answer(params) {
 
 async function comment(params) {
     return await new Promise((resolve, reject) => {
-        request.get(`${API.ZHIHU.COMMENT}/${params.answerId}/comments?include=${API.ZHIHU.INCLUDE.COMMENT}`)
+        request.get(`${params.type === 'answer'? API.ZHIHU.COMMENT : API.ZHIHU.COMMENT_ARTICLE}/${params.answerId}/comments?include=${API.ZHIHU.INCLUDE.COMMENT}`)
+            .set('Accept', 'application/json')  
             .query({ order: params.order })
             .query({ offset: params.offset })
             .query({ limit: params.limit })
             .query({ status: 'open' })
             .then(r => {
+                console.log("响应为", r.body)
                 resolve(r.body);
             })
             .catch(e => {
+                console.log("错误")
                 reject(e);
             })
     })

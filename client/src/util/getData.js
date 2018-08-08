@@ -1,6 +1,6 @@
 export default function getData (url) {
     return fetch(url, {
         credentials: "include",
-        referrer: "no-referrer"
+        mode: "cors"
     }).then(response => response.json());
 }

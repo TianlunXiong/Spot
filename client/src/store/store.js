@@ -35,6 +35,9 @@ export default new Vuex.Store({
 
         TOGGLE_ASIDE (state) {
             state.asideVisible = !state.asideVisible;
+        },
+        CLOSE_ASIDE (state) {
+            state.asideVisible = false;
         }
 
     },
@@ -66,6 +69,9 @@ export default new Vuex.Store({
             switch (param) {
             case "toggle":
                 context.commit("TOGGLE_ASIDE");
+                break;
+            case "close":
+                context.commit("CLOSE_ASIDE");
                 break;
             default:
                 break;

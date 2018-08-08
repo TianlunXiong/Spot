@@ -1,14 +1,11 @@
 <template>
     <el-container>
-        <el-aside width="65px" v-show="$store.state.asideVisible">
-            <!-- Aside content -->
-            <el-collapse-transition name="aside">
-                <div v-show="$store.state.asideVisible">
-                    <my-aside></my-aside>
-                </div>
+        <div v-show="$store.state.asideVisible" :class="covered &&'coverLayer'" @click="hideCover"></div>
+        <el-aside :width="covered ? '100%' : '200px'" class="navi">
+            <el-collapse-transition>
+                <my-aside v-show="$store.state.asideVisible"></my-aside>
             </el-collapse-transition>
         </el-aside>
-
         <el-container>
             <el-container>
                 <el-header height="" style="padding:1px">
@@ -23,7 +20,7 @@
             </el-container>
         </el-container>
         <transition name="el-fade-in">
-            <el-button v-show="isShow" @click="scrollToTop" class="el-icon-caret-top" style="position:fixed;bottom:5px;right:28px;border:none;padding:3px 20px;background-color:rgba(255,255,255,0)"></el-button>
+            <el-button @click="scrollToTop" class="el-icon-caret-top" style="position:fixed;bottom:5px;right:28px;border:none;padding:3px 20px;background-color:rgba(255,255,255,0)"></el-button>
         </transition>
     </el-container>
 </template>
@@ -37,15 +34,14 @@ import MyHeader from "./components/MyHeader.vue";
 export default {
     data () {
         return {
-            lengthScroll: 0
         };
     },
     computed: {
-        isShow () {
-            if (this.lengthScroll === 0) {
-                return false;
-            } else {
+        covered () {
+            if (window.innerWidth <= 726) {
                 return true;
+            } else {
+                return false;
             }
         }
     },
@@ -57,8 +53,8 @@ export default {
                 behavior: "smooth"
             });
         },
-        scrollHandler () {
-            this.lengthScroll = document.documentElement.scrollTop;
+        hideCover () {
+            this.$store.dispatch("aside", "toggle");
         }
     },
     created () {
@@ -82,9 +78,6 @@ export default {
             }
         });
     },
-    mounted () {
-        window.addEventListener("scroll", this.scrollHandler);
-    },
     components: {
         MyAside,
         MyHeader,
@@ -102,25 +95,13 @@ export default {
 .el-col {
     border-radius: 4px;
 }
-
-.grid-content {
-    border-radius: 4px;
-    min-height: 60px;
-}
-.row-bg {
-    padding: 10px 0;
-    background-color: #f9fafc;
-}
-
 ::-webkit-scrollbar {
     width: 8px;
 }
-
 ::-webkit-scrollbar-thumb {
     background-color: rgba(206, 206, 206, 0.76);
     border-radius: 4px;
 }
-
 * {
     font-family: "Helvetica Neue", Helvetica, "PingFang SC", "Hiragino Sans GB",
         "Microsoft YaHei", "微软雅黑", Arial, sans-serif;
@@ -136,5 +117,21 @@ em{
 a{
     text-decoration: none;
     color: #409eaa
+}
+.coverLayer{
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: #111;
+    opacity: 0.5;
+    z-index: 1;
+}
+
+.navi{
+    position: fixed;
+    z-index:100;
+    top:49px;
 }
 </style>

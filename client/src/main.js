@@ -18,6 +18,9 @@ import "element-ui/lib/theme-chalk/base.css";
 import {
     Pagination,
     Dialog,
+    Dropdown,
+    DropdownItem,
+    DropdownMenu,
     Badge,
     Menu,
     Submenu,
@@ -56,6 +59,9 @@ import CollapseTransition from "element-ui/lib/transitions/collapse-transition";
 Vue.component(CollapseTransition.name, CollapseTransition);
 Vue.use(Pagination);
 Vue.use(Dialog);
+Vue.use(Dropdown);
+Vue.use(DropdownItem);
+Vue.use(DropdownMenu);
 Vue.use(Menu);
 Vue.use(Submenu);
 Vue.use(Badge);

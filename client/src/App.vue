@@ -1,7 +1,7 @@
 <template>
     <el-container>
-        <div v-show="$store.state.asideVisible" :class="covered &&'coverLayer'" @click="hideCover"></div>
-        <el-aside :width="covered ? '100%' : '200px'" class="navi">
+        <div v-show="$store.state.asideVisible" :class="covered ? 'coverLayer' :'hide-coverLayer' " @click="hideCover"></div>
+        <el-aside :width="covered ? '100%' : '300px'" class="navi">
             <el-collapse-transition>
                 <my-aside v-show="$store.state.asideVisible"></my-aside>
             </el-collapse-transition>
@@ -107,8 +107,7 @@ export default {
         "Microsoft YaHei", "微软雅黑", Arial, sans-serif;
 }
 body{
-    margin-right: 4px;
-    margin-left: 4px;
+    margin: 4px;
 }
 em{
     font-style: normal;
@@ -126,6 +125,15 @@ a{
     height: 100%;
     background-color: #111;
     opacity: 0.5;
+    z-index: 1;
+}
+.hide-coverLayer{
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    opacity: 0;
     z-index: 1;
 }
 

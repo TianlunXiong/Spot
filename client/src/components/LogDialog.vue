@@ -2,7 +2,7 @@
     <el-dialog :visible ="$store.state.loginDialogVisble"  :fullscreen="full" :width="width"  @close="handlerClose" center>
         <div slot="title">
             <el-badge :value="'点击我快速体验'">
-                <el-button type="text" style="font-size:2em;color:gold;border:none;font-style:italic" @click="testLogin" :disabled="disableButton">Spot</el-button>
+                <el-button type="text" style="font-size:2em;color:gold;border:none;font-style:italic" @click="testLogin" :loading="disableButton" :disabled="disableButton">Spot</el-button>
             </el-badge>
         </div>
         <el-tabs v-model="activeDialog" :stretch="true">
@@ -37,7 +37,7 @@
         </el-tabs>
         <span slot="footer">
             <el-button @click="resetForm">重 置</el-button>
-            <el-button type="primary" @click="submitForm" :disabled="disableButton">提 交</el-button>
+            <el-button type="primary" @click="submitForm" :loading="disableButton" :disabled="disableButton">提 交</el-button>
         </span>
     </el-dialog>
 </template>

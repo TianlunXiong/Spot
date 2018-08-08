@@ -76,7 +76,6 @@ async function comment(params) {
             .query({ limit: params.limit })
             .query({ status: 'open' })
             .then(r => {
-                console.log("响应为", r.body)
                 resolve(r.body);
             })
             .catch(e => {

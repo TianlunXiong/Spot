@@ -48,7 +48,7 @@ module.exports = {
             order: ctx.query.order,
             type: ctx.query.type
         }).then(r => {
-            ctx.body = r || "没有"
+            ctx.body = r;
         })
 
         await next();

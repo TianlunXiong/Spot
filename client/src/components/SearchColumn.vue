@@ -48,7 +48,7 @@ export default {
             this.currentPage = 1;
             this.maxPage = 1;
         }
-        //  让所有答案折叠
+        //  让所有答案和评论折叠
         this.$store.dispatch("search/emitInitialSignal");
     },
     methods: {

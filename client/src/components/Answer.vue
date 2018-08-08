@@ -21,20 +21,31 @@
             </el-collapse-transition>
             <div style="text-align:center;">
                 <el-row>
+                    <el-col :span="6" style="text-align:left">
+                        <span style="color:rgba(0,0,0,0.3);font-size:14px;display:inline-block;margin-top:10px;">发表于{{ago}}</span>
+                    </el-col>
                     <el-col :span="8">
-                        <el-button type="text" style="color:gold;border:none;padding:5px 10px;margin-top:10px" icon="el-icon-check">
+                        <el-button :class="!isClose?'el-icon-caret-top':'el-icon-minus'" style="border:none;padding: 5px 20px;margin-top:10px" @click="isClose=!isClose" title="点我展开">
+                        </el-button>
+                    </el-col>
+                    <el-col :span="10" style="text-align:right">
+                        <div>
+                        <el-button type="text" style="color:gold;border:none;padding:5px 0px;margin-top:10px" icon="el-icon-check">
                             <em>赞成{{aData.voteup_count}}</em>
                         </el-button>
-                    </el-col>
-                    <el-col :span="8">
-                        <el-button :class="!isClose?'el-icon-caret-top':'el-icon-minus'" style="border:none;padding: 5px 20px;margin-top:10px" @click="isClose=!isClose">
-                        </el-button>
-                    </el-col>
-                    <el-col :span="8">
-                        <el-button v-if="aData.comment_count !== 0" :loading="commentLoading" style="color:gold;border:none;padding:5px;margin-top:10px" :icon="commentClosed?'el-icon-plus':'el-icon-close'" @click="showComment">
+                        <el-button v-if="aData.comment_count !== 0" :loading="commentLoading" style="color:gold;border:none;padding:5px 0px;margin-top:10px" :icon="commentClosed?'':'el-icon-close'" @click="toggleComment">
                             {{ commentClosed? aData.comment_count+"条评论" : "收起评论" }}
                         </el-button>
-                        <span style="color:rgba(0,0,0,0.3);font-size:14px;display:inline-block;margin-top:10px">发表于{{ago}}</span>
+                        <el-dropdown size="mini" placement="bottom-start" trigger="click" @command="handleCommand" style="margin-left:10px">
+                            <el-button type="text">
+                                <i class="el-icon-more" style="color:rgba(0,0,0,0.3)"></i>
+                            </el-button>
+                            <el-dropdown-menu slot="dropdown">
+                                <el-dropdown-item command="1">默认排序</el-dropdown-item>
+                                <el-dropdown-item command="2">时间排序</el-dropdown-item>
+                            </el-dropdown-menu>
+                        </el-dropdown>
+                        </div>
                     </el-col>
                 </el-row>
             </div>
@@ -43,6 +54,9 @@
             <div class="comment-style" v-show="!commentClosed" v-loading="commentLoading">
                 <el-row>
                     <el-col :span="24">
+                        <div style="padding: 5px" >
+                            共 {{aData.comment_count}} 条评论
+                        </div >
                         <comment class="comment-item" v-for="(item, index) in comment" :key="index" :cData="item" ></comment>
                         <el-pagination
                             @current-change="currentChange"
@@ -71,6 +85,7 @@ export default {
         return {
             isClose: true,
             comment: [],
+            commentOrder: "",
             commentClosed: true,
             pagination: {
                 currentPage: 0
@@ -105,7 +120,7 @@ export default {
         }
     },
     methods: {
-        showComment () {
+        toggleComment () {
             if (this.pagination.currentPage === 0) {
                 this.pagination.currentPage = 1;
                 this.getComment().then(() => {
@@ -113,6 +128,16 @@ export default {
                 });
             } else {
                 this.commentClosed = !this.commentClosed;
+            }
+        },
+        openComment () {
+            if (this.pagination.currentPage === 0) {
+                this.pagination.currentPage = 1;
+                this.getComment().then(() => {
+                    this.commentClosed = false;
+                });
+            } else {
+                this.commentClosed = false;
             }
         },
         initial () {
@@ -131,7 +156,7 @@ export default {
                 type: this.aData.type,
                 offset: 10 * (this.pagination.currentPage - 1),
                 limit: 10,
-                order: "normal"
+                order: this.commentOrder || (this.commentOrder = "normal")
             }).then(json => {
                 this.comment = json.data;
                 this.commentLoading = false;
@@ -154,6 +179,36 @@ export default {
         handlePrev (curr) {
             this.pagination.currentChange = curr;
             this.getComment();
+        },
+        handleCommand (curr) {
+            if (this.aData.comment_count !== 0) {
+                switch (curr) {
+                case "1":
+                    if (this.commentOrder !== "normal") {
+                        this.commentOrder = "normal";
+                        this.getComment().then(() => {
+                            this.openComment();
+                        });
+                    }
+                    break;
+                case "2":
+                    if (this.commentOrder !== "reverse") {
+                        this.commentOrder = "reverse";
+                        this.getComment().then(() => {
+                            this.openComment();
+                        });
+                    }
+                    break;
+                default:
+                    break;
+                }
+                this.openComment();
+            } else {
+                this.$message({
+                    message: "还没有评论哦",
+                    tyep: "info"
+                });
+            }
         }
     },
     components: {

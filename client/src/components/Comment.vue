@@ -25,7 +25,7 @@ export default {
     ],
     computed: {
         proxy () {
-            return `${config.URL}/api/agent?url=${this.cData.author.member.avatar_url}`;
+            return `${config.URL}/api/agent?url=${this.cData.author.member.avatar_url_template.replace(/\{size\}/, "s")}`;
         },
         ago () {
             const delta = ((Date.now() / 1000 - this.cData.created_time) / 3600).toFixed(0); // hours

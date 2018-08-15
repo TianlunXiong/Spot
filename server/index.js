@@ -23,18 +23,16 @@ const api_handler = require('./handlers/api');
 
 app.use(koaCompress({
     threshold: 500
-}))
+    }))
     .use(serve('../client/dist/', {
         maxage: 3600 * 60 * 1000,
     }))
-    // .use(koaCompress({
-    //     filter(content_type){
-    //         return /application\/javascript/.test(content_type)
-    //     },
-    //     threshold: 512,
-    //     flush: require('zlib').Z_SYNC_FLUSH
-    // }))
-    .use(koaBody({ multipart: true }))
+    .use(koaBody({
+        multipart: true,
+        jsonLimit: "50mb",
+        formLimit: "50mb",
+        textLimit: "50mb"
+    }))
     .use(cors_handler)
     .use(cookies_handler)
     .use(session_handler)

@@ -81,6 +81,10 @@ export default {
                     this.isLoading = false;
                 })
                 .catch(e => {
+                    this.$message({
+                        message: "网络或服务器错误",
+                        type: "error"
+                    });
                     this.isLoading = false;
                 });
         },

@@ -12,7 +12,6 @@ module.exports = async function (ctx, next) {
     //     "password" : "123456"
     // }
     const body = ctx.request.body;
-    console.log(body);
     const timeStamp = new Date().toLocaleString();
     let correct = false;
     let state = {};
@@ -24,9 +23,7 @@ module.exports = async function (ctx, next) {
             "password": body["password"]
         }).then(r => {
             //登陆信息一致
-            console.log(r);
             if (r.length === 1) {
-                console.log("yizhi")
                 correct = true
                 state.user = {
                     "e-mail" : body["e-mail"],
@@ -39,7 +36,6 @@ module.exports = async function (ctx, next) {
         if (correct) {
             var secret = new Date().getTime() + Math.random().toString();
             var session_code = crypto.createHmac('sha256', secret).digest('hex');
-            console.log(session_code)
             await update(USER, [{
                     "e-mail": body["e-mail"]
                 },
@@ -66,7 +62,7 @@ module.exports = async function (ctx, next) {
             "session_code" : ctx.state.user._session
         }).then(r=>{
             if(r.length === 1){
-                console.log("by session")
+                // console.log("by session")
                 state.success  = true;
                 state.reason = "session";
                 state.user = {

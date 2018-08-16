@@ -182,7 +182,7 @@ export default {
         testLogin () {
             new Promise((resolve, reject) => {
                 this.ruledForm.login.email = "testuser@spot.com";
-                this.ruledForm.login.password = 123123123;
+                this.ruledForm.login.password = "123123123";
                 this.activeDialog = "login";
                 resolve();
             }).then(() => {
@@ -247,6 +247,13 @@ export default {
                             })
                             .then(() => {
                                 this.disableButton = false;
+                            })
+                            .catch(e => {
+                                this.disableButton = false;
+                                this.$message({
+                                    message: "网络或服务器错误",
+                                    type: "error"
+                                });
                             });
                     } else {
                         return false;
@@ -300,7 +307,7 @@ export default {
                                                     );
                                                     this.$store
                                                         .dispatch(
-                                                            "getArticle"
+                                                            "user/getArticle"
                                                         )
                                                         .then(() => {
                                                             setTimeout(
@@ -333,6 +340,13 @@ export default {
                             })
                             .then(() => {
                                 this.disableButton = false;
+                            })
+                            .catch(e => {
+                                this.disableButton = false;
+                                this.$message({
+                                    message: "网络或服务器错误",
+                                    type: "error"
+                                });
                             });
                     } else {
                         return false;

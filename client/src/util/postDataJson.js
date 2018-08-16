@@ -2,7 +2,9 @@
 export default function (url, data) {
     return fetch(url, {
         body: JSON.stringify(data),
-        cache: "no-cache",
+        headers: {
+            "content-type": "application/json"
+        },
         credentials: "include",
         method: "POST",
         mode: "cors",

@@ -5,6 +5,6 @@ export default function (url, data, headers) {
         credentials: "include",
         method: "POST",
         mode: "cors",
-        redirect: "follow",
+        redirect: "follow"
     }).then(response => response.json());
 }

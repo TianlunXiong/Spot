@@ -17,14 +17,13 @@
             <span>&nbsp;</span>
             </el-col>
             <el-col :span="24" :md="16">
-                <div>
-                    <form action="">
+                <quill-editor v-loading="uploading" v-model="content" ref="Editor" @change="autoSaveContent($event)" :options="editorOption"></quill-editor>
+                <div v-show="false">
+                    <form>
                         <input type="file" id="uploader">
                         <input type="reset" id="reseter">
                     </form>
                 </div>
-                <quill-editor v-model="content" ref="Editor" @change="autoSaveContent($event)" :options="editorOption">
-                </quill-editor>
             </el-col>
             <el-col :md="4">
                 <span>&nbsp;</span>
@@ -45,8 +44,8 @@
 </template>
 
 <script>
-import config from '../config/'
-import postData from '../util/postData'
+import config from "../config/";
+import postData from "../util/postData";
 
 const tools = [
     [{"header": [1, 2, 3, 4, 5, 6, false]}],
@@ -58,31 +57,38 @@ const tools = [
     ["clean"],
     ["link", "image"]];
 
-const option = {
-    placeholder: "自此输入内容",
-    modules: {
-        toolbar: {
-            container: tools,
-            handlers: {
-                'image': function (value) {
-                    const fileInput = document.getElementById('uploader');
-                    if (value) {
-                        fileInput.click();
-                    } else {
-                        this.quill.format('image', false);
-                    }
-                }
-            }
-        }
-    }
-};
-
 export default {
     data () {
+        const self = this;
         return {
             title: "",
             content: "",
-            editorOption: option,
+            uploading: false,
+            editorOption: {
+                placeholder: "自此输入内容",
+                modules: {
+                    toolbar: {
+                        container: tools,
+                        handlers: {
+                            "image": function (value) {
+                                if (self.$store.state.user.isLogin) {
+                                    const fileInput = document.getElementById("uploader");
+                                    if (value) {
+                                        fileInput.click();
+                                    } else {
+                                        this.quill.format("image", false);
+                                    }
+                                } else {
+                                    self.$message({
+                                        message: "登陆后才能加入图片噢",
+                                        type: "info"
+                                    });
+                                }
+                            }
+                        }
+                    }
+                }
+            },
             text: "",
             offset: 0,
             temp: 0
@@ -93,19 +99,47 @@ export default {
         this.content = this.$store.state.editor.articleBuffer.content;
     },
     mounted () {
-        const fileInput = document.getElementById('uploader');
+        const fileInput = document.getElementById("uploader");
+        const reseter = document.getElementById("reseter");
         fileInput.onchange = e => {
             const file = fileInput.files[0];
+            this.uploading = true;
             postData("http://localhost:8080/upload", file, {
-                "Content-Type" : file.type
-            }).then( r=> {
-                let quill = this.$refs.Editor.quill;
-                const length = quill.getSelection().index;
-                console.log(r);
-                quill.insertEmbed(length, 'image', `${config.URL}/${r.state.path}`)
-                quill.setSelection(length + 1);
+                "Content-Type": file.type
+            }).then(r => {
+                this.uploading = false;
+                if (r.success) {
+                    let quill = this.$refs.Editor.quill;
+                    quill.focus();
+                    const length = quill.getSelection().index;
+                    quill.insertEmbed(length, "image", `${config.URL}/${r.state.path}`);
+                    quill.setSelection(length + 1);
+                    reseter.click();
+                } else {
+                    switch (r.state.reason) {
+                    case "invalid":
+                        this.$message({
+                            message: "请重新登陆",
+                            type: "info"
+                        });
+                        break;
+                    case "noLogin":
+                        this.$message({
+                            message: "请登陆",
+                            type: "info"
+                        });
+                        break;
+                    }
+                }
+            }).catch(e => {
+                this.$message({
+                    message: "网络或服务器错误",
+                    type: "error"
+                });
+                this.uploading = false;
+                reseter.click();
             });
-        }
+        };
     },
     computed: {
         textLength () {
@@ -183,6 +217,12 @@ export default {
                             center: true
                         });
                     }
+                })
+                .catch(e => {
+                    this.$message({
+                        message: "网络或服务器错误",
+                        type: "error"
+                    });
                 });
         },
         update () {
@@ -210,6 +250,12 @@ export default {
                             center: true
                         });
                     }
+                })
+                .catch(e => {
+                    this.$message({
+                        message: "网络或服务器错误",
+                        type: "error"
+                    });
                 });
         },
         showCancelButton () {

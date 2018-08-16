@@ -5,10 +5,9 @@ const USER = require('../config').DB.COLLECTION.USER
 
 module.exports = async function (ctx, next) {
     ctx.response.type = "application/json";
-    const body = JSON.parse(ctx.request.body);
+    const body = ctx.request.body;
     const timeStamp = new Date().toLocaleString();
     let state = {};
-    console.log("begin",body)
     if (ctx.state.user._hasSession) {
         var temp = false;
         await check(USER, {

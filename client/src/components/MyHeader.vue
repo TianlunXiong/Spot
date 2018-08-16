@@ -103,6 +103,12 @@ export default {
                             this.$router.push("/search");
                             this.searchLoading = false;
                         });
+                    })
+                    .catch(e => {
+                        this.$message({
+                            message: "网络或服务器错误",
+                            type: "error"
+                        });
                     });
             } else {
                 this.$message({
@@ -157,6 +163,13 @@ export default {
                     })
                     .then(() => {
                         this.isLogouting = false;
+                    })
+                    .catch(e => {
+                        this.isLogouting = false;
+                        this.$message({
+                            message: "网络或服务器错误",
+                            type: "error"
+                        });
                     });
             } else {
                 this.$store.dispatch("loginDialog", "open");

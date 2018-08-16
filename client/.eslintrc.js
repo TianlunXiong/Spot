@@ -24,7 +24,7 @@ module.exports = {
     // allow async-await
     "indent": ["error", 4],
     "quotes": ["error", "double"],
-    "semi": ["error", "always"],
+    "semi": ["warn", "always"],
     "no-console": "error",
     "no-new" : 0,
     "arrow-parens": 0,

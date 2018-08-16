@@ -44,7 +44,7 @@ app.use(koaCompress({
 router.post('/post', post_handler);
 router.post('/update', update_handler);
 router.post('/upload', upload_handler);
-router.options('/upload', option_handler);
+router.options('*', option_handler);
 router.post('/login', login_handler);
 router.post('/logout', logout_handler);
 router.post('/register', register_handler);

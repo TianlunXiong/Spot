@@ -42,44 +42,6 @@ module.exports = async function (ctx, next) {
         timeStamp,
         state
     }
-
-
-    // await check(USER,{
-
-    // })
-
-    // if (ctx.state.user._hasSession) {
-    //     var temp = false;
-    //     await check(USER, {
-    //         "session_code": ctx.state.user._session
-    //     }).then(r => {
-    //         if (r.length === 1) {
-    //             temp = true;
-    //         }
-    //     })
-
-    //     if (temp) {
-    //         await update(USER, [{
-    //                 "username": body["username"]
-    //             },
-    //             {
-    //                 $unset: {
-    //                     "session_code": ""
-    //                 }
-    //             }
-    //         ]).then(r => {
-    //             ctx.cookies.set("ous");
-    //             state.success = true;
-    //             state.message = "注销成功"
-    //         })
-    //     } else {
-    //         state.success = false;
-    //     }
-    // } else {
-    //     state.success = false;
-    // }
-
-
-
+    
     await next();
 }

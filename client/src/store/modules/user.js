@@ -52,12 +52,12 @@ export default {
         },
         login (context, load) {
             //  发送给后台 验证邮箱与密码
-            return util.postData(URL + "/login", {
+            return util.postDataJson(URL + "/login", {
                 ...load
             });
         },
         logout (context, load) {
-            return util.postData(URL + "/logout", {
+            return util.postDataJson(URL + "/logout", {
                 ...load
             });
         },
@@ -80,7 +80,7 @@ export default {
             return util.postDataJson(URL + "/delete", load);
         },
         register (context, load) {
-            return util.postData(URL + "/register", load);
+            return util.postDataJson(URL + "/register", load);
         }
     },
 

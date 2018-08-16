@@ -104,7 +104,7 @@ export default {
         fileInput.onchange = e => {
             const file = fileInput.files[0];
             this.uploading = true;
-            postData("http://localhost:8080/upload", file, {
+            postData(`${config.URL}/upload`, file, {
                 "Content-Type": file.type
             }).then(r => {
                 this.uploading = false;

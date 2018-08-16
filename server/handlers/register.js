@@ -4,7 +4,6 @@ const USER = require('../config').DB.COLLECTION.USER
 
 module.exports = async function (ctx, next) {
     const body = ctx.request.body;
-    console.log(body)
     const timeStamp = new Date().toLocaleString();
     ctx.response.type = "application/json"
     // 用户注册的必要信息:

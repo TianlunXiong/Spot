@@ -19,13 +19,17 @@ const delete_handler = require('./handlers/delete')
 const post_handler = require('./handlers/post')
 const cors_handler = require('./handlers/cors');
 const api_handler = require('./handlers/api');
-
+const upload_handler = require('./handlers/upload')
+const option_handler = require('./handlers/option')
 
 app.use(koaCompress({
     threshold: 500
     }))
-    .use(serve('../client/dist/', {
+    .use(serve('./static/dist', {
         maxage: 3600 * 60 * 1000,
+    }))
+    .use(serve('./static/', {
+        maxage: 3600 * 15 * 1000
     }))
     .use(koaBody({
         multipart: true,
@@ -39,6 +43,8 @@ app.use(koaCompress({
 
 router.post('/post', post_handler);
 router.post('/update', update_handler);
+router.post('/upload', upload_handler);
+router.options('/upload', option_handler);
 router.post('/login', login_handler);
 router.post('/logout', logout_handler);
 router.post('/register', register_handler);

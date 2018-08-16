@@ -1,17 +1,10 @@
-export default function (url, data) {
-    const formData = new FormData();
-
-    Object.keys(data).forEach(key => {
-        formData.append(key, data[key]);
-    });
-
+export default function (url, data, headers) {
     return fetch(url, {
-        body: formData,
-        cache: "no-cache",
+        body: data,
+        headers,
         credentials: "include",
         method: "POST",
         mode: "cors",
         redirect: "follow",
-        referrer: "no-referrer"
     }).then(response => response.json());
 }

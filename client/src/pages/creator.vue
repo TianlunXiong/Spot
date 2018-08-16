@@ -17,6 +17,12 @@
             <span>&nbsp;</span>
             </el-col>
             <el-col :span="24" :md="16">
+                <div>
+                    <form action="">
+                        <input type="file" id="uploader">
+                        <input type="reset" id="reseter">
+                    </form>
+                </div>
                 <quill-editor v-model="content" ref="Editor" @change="autoSaveContent($event)" :options="editorOption">
                 </quill-editor>
             </el-col>
@@ -39,14 +45,44 @@
 </template>
 
 <script>
+import config from '../config/'
+import postData from '../util/postData'
+
+const tools = [
+    [{"header": [1, 2, 3, 4, 5, 6, false]}],
+    ["bold", "italic", "underline", "strike"],
+    ["blockquote", "code-block"],
+    [{ "color": [] }, { "background": [] }],
+    [{ "align": [] }],
+    [{ "font": [] }],
+    ["clean"],
+    ["link", "image"]];
+
+const option = {
+    placeholder: "自此输入内容",
+    modules: {
+        toolbar: {
+            container: tools,
+            handlers: {
+                'image': function (value) {
+                    const fileInput = document.getElementById('uploader');
+                    if (value) {
+                        fileInput.click();
+                    } else {
+                        this.quill.format('image', false);
+                    }
+                }
+            }
+        }
+    }
+};
+
 export default {
     data () {
         return {
             title: "",
             content: "",
-            editorOption: {
-                placeholder: "自此输入内容"
-            },
+            editorOption: option,
             text: "",
             offset: 0,
             temp: 0
@@ -55,6 +91,21 @@ export default {
     created () {
         this.title = this.$store.state.editor.articleBuffer.title;
         this.content = this.$store.state.editor.articleBuffer.content;
+    },
+    mounted () {
+        const fileInput = document.getElementById('uploader');
+        fileInput.onchange = e => {
+            const file = fileInput.files[0];
+            postData("http://localhost:8080/upload", file, {
+                "Content-Type" : file.type
+            }).then( r=> {
+                let quill = this.$refs.Editor.quill;
+                const length = quill.getSelection().index;
+                console.log(r);
+                quill.insertEmbed(length, 'image', `${config.URL}/${r.state.path}`)
+                quill.setSelection(length + 1);
+            });
+        }
     },
     computed: {
         textLength () {

@@ -22,14 +22,20 @@
         <transition name="el-fade-in">
             <el-button @click="scrollToTop" class="el-icon-caret-top" style="position:fixed;bottom:5px;right:28px;border:none;padding:3px 20px;background-color:rgba(255,255,255,0)"></el-button>
         </transition>
+        <transition name="el-fade-in">
+            <canvas-bg v-show="$store.state.canvas.visible"></canvas-bg>
+        </transition>
+        <canvas-ctrl></canvas-ctrl>
     </el-container>
 </template>
 
 <script>
 
 import MyAside from "./components/MyAside.vue";
-import LogDialog from "./components/LogDialog.vue";
 import MyHeader from "./components/MyHeader.vue";
+import LogDialog from "./components/LogDialog.vue";
+import CanvasBg from "./components/CanvasBg.vue";
+import CanvasCtrl from "./components/CanvasCtrl.vue"
 
 export default {
     data () {
@@ -81,13 +87,17 @@ export default {
     components: {
         MyAside,
         MyHeader,
-        LogDialog
+        LogDialog,
+        CanvasBg,
+        CanvasCtrl
     }
 };
 </script>
 
 <style lang="css" >
-@import url("element-ui/lib/theme-chalk/base.css");
+.el-card{
+    background-color: rgba(255, 255, 255, 0.33);
+}
 
 .el-row {
     margin-bottom: 0px;

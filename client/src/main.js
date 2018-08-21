@@ -17,6 +17,7 @@ import App from "./App.vue";
 import "element-ui/lib/theme-chalk/base.css";
 import {
     Pagination,
+    ColorPicker,
     Dialog,
     Dropdown,
     DropdownItem,
@@ -27,6 +28,7 @@ import {
     MenuItem,
     MenuItemGroup,
     Input,
+    InputNumber,
     Switch,
     Button,
     TabPane,
@@ -58,6 +60,7 @@ import CollapseTransition from "element-ui/lib/transitions/collapse-transition";
 
 Vue.component(CollapseTransition.name, CollapseTransition);
 Vue.use(Pagination);
+Vue.use(ColorPicker);
 Vue.use(Dialog);
 Vue.use(Dropdown);
 Vue.use(DropdownItem);
@@ -68,6 +71,7 @@ Vue.use(Badge);
 Vue.use(MenuItem);
 Vue.use(MenuItemGroup);
 Vue.use(Input);
+Vue.use(InputNumber);
 Vue.use(Switch);
 Vue.use(Button);
 Vue.use(Tabs);

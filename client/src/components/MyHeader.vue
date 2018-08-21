@@ -2,13 +2,13 @@
     <div>
         <el-row>
             <el-col :span="24">
-                <div class="bg" style="background-color:#7F2EB3;text-align:center;height:40px;border-radius:4px">
+                <div class="bg" style="background-color:rgba(127,26,179,0.9);text-align:center;height:40px;border-radius:4px">
                     <div style="position:absolute;left:0px;top:0px;height:40px;width:40px" >
                         <el-button type="text" @click="toggleAsideBar" style="color:white;padding:13px;border:none" >
                             <i class="el-icon-menu"></i>
                         </el-button>
                     </div>
-                    <span class="title"  >Spot</span>
+                    <span class="title" @click="showCanvasOption"  >Spot</span>
                     <el-switch style="position:absolute;top:0px;right:5px;height:40px;" :value="login" active-color="#13ce66" inactive-color="#C0CCDA" @change="notify" :disabled="isLogouting">
                     </el-switch>
                 </div>
@@ -174,6 +174,9 @@ export default {
             } else {
                 this.$store.dispatch("loginDialog", "open");
             }
+        },
+        showCanvasOption () {
+            this.$store.dispatch("canvasOption")
         }
     }
 };
@@ -188,5 +191,6 @@ export default {
     line-height:40px;
     font-size:24px;
     color:gold;
+    user-select: none;
 }
 </style>

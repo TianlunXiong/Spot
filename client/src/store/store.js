@@ -3,6 +3,7 @@ import Vuex from "vuex";
 import user from "./modules/user";
 import search from "./modules/search";
 import editor from "./modules/editor";
+import canvas from "./modules/canvas";
 
 Vue.use(Vuex);
 
@@ -10,12 +11,14 @@ export default new Vuex.Store({
     state: {
         asideVisible: false,
         loginDialogVisble: false,
-        searchBarVisible: false
+        searchBarVisible: false,
+        canvasOptionVisible: false
     },
     modules: {
         user,
         search,
-        editor
+        editor,
+        canvas
     },
     getters: {
 
@@ -38,6 +41,10 @@ export default new Vuex.Store({
         },
         CLOSE_ASIDE (state) {
             state.asideVisible = false;
+        },
+
+        TOGGLE_CANVAS_OPTION (state) {
+            state.canvasOptionVisible = !state.canvasOptionVisible;
         }
 
     },
@@ -76,6 +83,10 @@ export default new Vuex.Store({
             default:
                 break;
             }
+        },
+
+        canvasOption (context) {
+            context.commit("TOGGLE_CANVAS_OPTION");
         }
     }
 });

@@ -1,5 +1,5 @@
 <template>
-    <el-card :body-style="{ padding: '5px' }" style="margin:20px 2px" shadow="hover">
+    <el-card :body-style="{ padding: '5px' }" style="margin:20px 2px" shadow="hover" ref="anchorI">
         <div slot="header">
             <span style="color:white;background-color:#409EFF;border-radius:2px">{{type}}</span>
             <a class="href" style="font-weight:bold" v-html="qData.highlight.title"> </a>
@@ -30,7 +30,7 @@ export default {
             answerList: [],
             currentPage: 0,
             maxPage: 0,
-            isLoading: false
+            isLoading: false,
         };
     },
     watch: {
@@ -116,6 +116,10 @@ export default {
         closeMe () {
             this.isClose = true;
             this.currentPage = 0;
+        },
+        toAnchorI () {
+            const p = this.$refs["anchorI"].getBoundingClientRect().y + document.documentElement.scrollTop
+            console.log(p)
         }
     },
     components: {

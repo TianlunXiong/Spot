@@ -7,20 +7,24 @@
             </el-collapse-transition>
         </el-aside>
         <el-container>
-            <el-container>
-                <el-header height="" style="padding:1px">
-                    <!-- Header content -->
-                    <log-dialog></log-dialog>
-                    <my-header></my-header>
-                </el-header>
-                <el-main height="" style="padding:0px">
-                    <!-- Main content -->
-                    <router-view></router-view>
-                </el-main>
-            </el-container>
+            <el-header height="" style="padding:1px">
+                <!-- Header content -->
+                <log-dialog></log-dialog>
+                <my-header></my-header>
+            </el-header>
+            <el-main height="" style="padding:0px">
+                <!-- Main content -->
+                <router-view></router-view>
+            </el-main>
+            <el-footer height="10">
+                <div style="text-align:center;font-size:8px;color:rgba(0,0,0,0.3);user-select:none">
+                    鄂ICP备18019999号
+                </div>
+            </el-footer>
+            
         </el-container>
         <transition name="el-fade-in">
-            <el-button @click="scrollToTop" class="el-icon-caret-top" style="position:fixed;bottom:5px;right:28px;border:none;padding:3px 20px;background-color:rgba(255,255,255,0)"></el-button>
+            <el-button v-show="topBar" @click="scrollToTop" class="el-icon-caret-top" style="position:fixed;bottom:5px;right:28px;border:none;padding:3px 20px;background-color:rgba(255,255,255,0)"></el-button>
         </transition>
         <transition name="el-fade-in">
             <canvas-bg v-show="$store.state.canvas.visible"></canvas-bg>
@@ -28,7 +32,6 @@
         <canvas-ctrl></canvas-ctrl>
     </el-container>
 </template>
-
 <script>
 
 import MyAside from "./components/MyAside.vue";
@@ -40,6 +43,7 @@ import CanvasCtrl from "./components/CanvasCtrl.vue"
 export default {
     data () {
         return {
+            topBar : false
         };
     },
     computed: {
@@ -53,11 +57,10 @@ export default {
     },
     methods: {
         scrollToTop () {
-            window.scrollTo({
-                top: 0,
-                left: 0,
-                behavior: "smooth"
-            });
+            this.$store.dispatch("scrollTo",{
+                v: 1,
+                p: 0
+            })
         },
         hideCover () {
             this.$store.dispatch("aside", "toggle");
@@ -83,6 +86,20 @@ export default {
                 this.$store.dispatch("user/updateArticleState", true);
             }
         });
+    },
+    mounted () {
+        let timeLast = Date.now()
+        window.addEventListener('scroll', e => {
+
+            if((Date.now() - timeLast)> 16) {
+                if(document.documentElement.scrollTop > 100){
+                    this.topBar = true;
+                } else {
+                    this.topBar = false;
+                }
+                timeLast = Date.now()
+            }
+        })
     },
     components: {
         MyAside,

@@ -2,7 +2,8 @@
         <el-dialog
                 title="核能发呆器设置"
                 :visible.sync="$store.state.canvasOptionVisible"
-                :width="responseWidth">
+                :width="responseWidth"
+                >
                 <el-alert
                     v-if="showWarning"
                     title="耗电量巨大, 使用电池的情况下慎用"
@@ -56,7 +57,7 @@ export default {
     data(){
         return {
             lineWidth : [this.$store.state.canvas.config.minWidth,this.$store.state.canvas.config.maxWidth],
-            color: "rgba(19, 206, 102, 0.8)",
+            color: "rgba(13, 205, 99, 0.8)",
             R1: this.$store.state.canvas.config.R1,
             R2: this.$store.state.canvas.config.R2,
             x: this.$store.state.canvas.config.x,
@@ -124,5 +125,9 @@ export default {
     }
     .d1 > span{
         line-height: 40px;
+    }
+
+    roll {
+        background-color: red;
     }
 </style>

@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div ref="anchorA">
         <el-card :body-style="{ padding: '12px' }" shadow="never" class="answer-gutter" v-if="aData.type !== 'question'">
             <div slot="header" style="position:relative">
                 <img style="height:24px;width:24px;display:inline-block;margin-bottom:-5px" :src="proxy" alt="">
@@ -19,16 +19,16 @@
                 <div v-show="!isClose" v-html="aData.content">
                 </div>
             </el-collapse-transition>
-            <div style="text-align:center;">
+            <div style="text-align:center;" ref="anchorC" >
                 <el-row>
                     <el-col :span="6" style="text-align:left">
-                        <span style="color:rgba(0,0,0,0.3);font-size:14px;display:inline-block;margin-top:10px;">发表于{{ago}}</span>
+                        <span  style="color:rgba(0,0,0,0.3);font-size:14px;display:inline-block;margin-top:10px;">发表于{{ago}}</span>
                     </el-col>
                     <el-col :span="8">
                         <el-button :class="!isClose?'el-icon-caret-top':'el-icon-minus'" style="border:none;padding: 5px 20px;margin-top:10px" @click="isClose=!isClose" title="点我展开">
                         </el-button>
                     </el-col>
-                    <el-col :span="10" style="text-align:right">
+                    <el-col :span="10" style="text-align:right" >
                         <div>
                         <el-button type="text" style="color:gold;border:none;padding:5px 0px;margin-top:10px" icon="el-icon-check">
                             <em>赞成{{aData.voteup_count}}</em>
@@ -51,7 +51,7 @@
             </div>
         </el-card>
         <transition name="el-zoom-in-top">
-            <div class="comment-style" v-show="!commentClosed" v-loading="commentLoading">
+            <div class="comment-style" v-show="!commentClosed" v-loading="commentLoading" >
                 <el-row>
                     <el-col :span="24">
                         <div style="padding: 5px" >
@@ -95,7 +95,7 @@ export default {
     },
     watch: {
         closeSignal () {
-            this.initial();
+            this.reset();
         }
     },
     computed: {
@@ -125,9 +125,20 @@ export default {
                 this.pagination.currentPage = 1;
                 this.getComment().then(() => {
                     this.commentClosed = false;
-                });
+                }).then(()=>{
+                    this.toAnchorC()
+                })
             } else {
                 this.commentClosed = !this.commentClosed;
+                if(!this.commentClosed) {
+                    this.$nextTick(()=>{
+                        this.toAnchorC()
+                    })
+                } else {
+                    this.$nextTick(()=>{
+                        this.toAnchorA()
+                    })  
+                }
             }
         },
         openComment () {
@@ -135,12 +146,31 @@ export default {
                 this.pagination.currentPage = 1;
                 this.getComment().then(() => {
                     this.commentClosed = false;
-                });
+                }).then(()=>{
+                    this.toAnchorC()
+                })
             } else {
                 this.commentClosed = false;
+                this.$nextTick(()=>{
+                    this.toAnchorC()
+                })
             }
         },
-        initial () {
+        toAnchorC () {
+            const p = this.$refs["anchorC"].getBoundingClientRect().y + document.documentElement.scrollTop
+            this.$store.dispatch("scrollTo", {
+                v: 115,
+                p
+            })
+        },
+        toAnchorA () {
+            const p = this.$refs["anchorA"].getBoundingClientRect().y + document.documentElement.scrollTop
+            this.$store.dispatch("scrollTo", {
+                v: 115,
+                p
+            })
+        },
+        reset () {
             this.isClose = true;
             this.comment = [];
             this.commentClosed = true;
@@ -160,6 +190,9 @@ export default {
             }).then(json => {
                 this.comment = json.data;
                 this.commentLoading = false;
+                this.$nextTick(()=>{
+                    this.toAnchorC()
+                })
             }).catch(e => {
                 this.$message({
                     message: "网络或服务器错误",

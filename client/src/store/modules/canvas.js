@@ -7,11 +7,11 @@ export default {
             minWidth: 0,
             x:0,
             y:0,
-            R1: 162,
-            R2: -405,
-            radius: window.innerWidth,
-            velocity: 1,
-            frequency: 0.5, //默认 2s 为周期
+            R1: 521,
+            R2: -265,
+            radius: (window.innerHeight > window.innerWidth) ? 1.5*window.innerHeight : 1.2*window.innerWidth,
+            velocity: 0,
+            frequency: 0, //默认 2s 为周期
             color: "gold"
         }
     },

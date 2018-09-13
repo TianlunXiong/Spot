@@ -1,6 +1,6 @@
 <template>
     <div class="bg-bottom">
-        <canvas ref="canvas" :width="availableWidth" :height="availableHeight" ></canvas>
+        <canvas style="z-index:999" ref="canvas" :width="availableWidth" :height="availableHeight" ></canvas>
     </div>
 </template>
 

@@ -87,6 +87,39 @@ export default new Vuex.Store({
 
         canvasOption (context) {
             context.commit("TOGGLE_CANVAS_OPTION");
+        },
+
+        scrollTo (context, load) {
+            const s = Date.now()
+            const html = document.documentElement
+            const delta = -(Math.abs(html.scrollTop - load.p))
+            let ani1, ani2
+            if(html.scrollTop > load.p) {
+                (function smooth(){
+                    if(html.scrollTop > load.p){
+                        html.scrollTop += delta * (0.05 + 0.3 * Math.exp(-(Date.now() - s)/20))
+                        ani1 = requestAnimationFrame(smooth)
+                    } else {
+                        cancelAnimationFrame(ani1)
+                    }
+                    if((Date.now() - s)> 700) {
+                        cancelAnimationFrame(ani1)
+                    }
+                })()
+            } 
+            if(html.scrollTop < load.p) {
+                (function aa(){
+                    if(html.scrollTop < load.p){
+                        html.scrollTop -= delta * (0.05 + 0.3 * Math.exp(-(Date.now() - s)/20))
+                        ani2 = requestAnimationFrame(aa)
+                    } else {
+                        cancelAnimationFrame(ani2)
+                    }
+                    if((Date.now() - s)> 700) {
+                        cancelAnimationFrame(ani2)
+                    }
+                })()
+            }
         }
     }
 });

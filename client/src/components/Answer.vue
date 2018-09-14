@@ -157,14 +157,14 @@ export default {
             }
         },
         toAnchorC () {
-            const p = this.$refs["anchorC"].getBoundingClientRect().y + document.documentElement.scrollTop
+            const p = this.$refs["anchorC"].getBoundingClientRect().top + window.pageYOffset
             this.$store.dispatch("scrollTo", {
                 v: 115,
                 p
             })
         },
         toAnchorA () {
-            const p = this.$refs["anchorA"].getBoundingClientRect().y + document.documentElement.scrollTop
+            const p = this.$refs["anchorA"].getBoundingClientRect().top + window.pageYOffset
             this.$store.dispatch("scrollTo", {
                 v: 115,
                 p

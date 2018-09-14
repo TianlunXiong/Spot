@@ -91,13 +91,15 @@ export default new Vuex.Store({
 
         scrollTo (context, load) {
             const s = Date.now()
-            const html = document.documentElement
-            const delta = -(Math.abs(html.scrollTop - load.p))
+            const delta = -(Math.abs(window.pageYOffset - load.p))
+            let p1 , p2
+            p1 = p2 = window.pageYOffset
             let ani1, ani2
-            if(html.scrollTop > load.p) {
+            if(p1 > load.p) {
                 (function smooth(){
-                    if(html.scrollTop > load.p){
-                        html.scrollTop += delta * (0.05 + 0.3 * Math.exp(-(Date.now() - s)/20))
+                    if(p1 > load.p){
+                        p1 += delta * (0.05 + 0.3 * Math.exp(-(Date.now() - s)/20))
+                        window.scrollTo(0, p1)
                         ani1 = requestAnimationFrame(smooth)
                     } else {
                         cancelAnimationFrame(ani1)
@@ -107,10 +109,11 @@ export default new Vuex.Store({
                     }
                 })()
             } 
-            if(html.scrollTop < load.p) {
+            if(p1 < load.p) {
                 (function aa(){
-                    if(html.scrollTop < load.p){
-                        html.scrollTop -= delta * (0.05 + 0.3 * Math.exp(-(Date.now() - s)/20))
+                    if(p1 < load.p){
+                        p1 -= delta * (0.05 + 0.3 * Math.exp(-(Date.now() - s)/20))
+                        window.scrollTo(0, p1)
                         ani2 = requestAnimationFrame(aa)
                     } else {
                         cancelAnimationFrame(ani2)

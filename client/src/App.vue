@@ -90,9 +90,20 @@ export default {
     mounted () {
         let timeLast = Date.now()
         window.addEventListener('scroll', e => {
-
+            const Rect = document.documentElement.getBoundingClientRect()
             if((Date.now() - timeLast)> 16) {
-                if(document.documentElement.scrollTop > 100){
+                if(window.pageYOffset > 100){
+                    this.topBar = true;
+                } else {
+                    this.topBar = false;
+                }
+                timeLast = Date.now()
+            }
+        })
+        window.addEventListener('touchstart', e => {
+            const Rect = document.documentElement.getBoundingClientRect()
+            if((Date.now() - timeLast)> 16) {
+                if(window.pageYOffset > 100){
                     this.topBar = true;
                 } else {
                     this.topBar = false;

@@ -1,6 +1,6 @@
-const check = require('../methods/check')
-const signup = require('../methods/signup')
-const USER = require('../config').DB.COLLECTION.USER
+const check = require('../../methods/check')
+const signup = require('../../methods/signup')
+const USER = require('../../config').DB.COLLECTION.USER
 
 module.exports = async function (ctx, next) {
     const body = ctx.request.body;

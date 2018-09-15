@@ -1,5 +1,5 @@
-const check = require('../methods/check')
-const USER = require('../config').DB.COLLECTION.USER
+const check = require('../../methods/check')
+const USER = require('../../config').DB.COLLECTION.USER
 
 
 module.exports = async function (ctx, next) {

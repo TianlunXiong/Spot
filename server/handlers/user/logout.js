@@ -1,6 +1,6 @@
-const check = require('../methods/check')
-const update = require('../methods/update')
-const USER = require('../config').DB.COLLECTION.USER
+const check = require('../../methods/check')
+const update = require('../../methods/update')
+const USER = require('../../config').DB.COLLECTION.USER
 
 
 module.exports = async function (ctx, next) {
@@ -8,7 +8,7 @@ module.exports = async function (ctx, next) {
     const body = ctx.request.body;
     const timeStamp = new Date().toLocaleString();
     let state = {};
-    console.log("begin",body)
+
     if (ctx.state.user._hasSession) {
         var temp = false;
         await check(USER, {
@@ -21,19 +21,17 @@ module.exports = async function (ctx, next) {
 
         if (temp) {
             await update(USER, [{
-                "username": body["username"]
-            },
-            {
-                $push : {"articles" : {
-                    id : Math.trunc(Math.random()*1e6),
-                    title : body.article.title, 
-                    content : body.article.content,
-                    timeStamp: timeStamp
-                }}
-            }
+                    "username": body["username"]
+                },
+                {
+                    $unset: {
+                        "session_code": ""
+                    }
+                }
             ]).then(r => {
+                ctx.cookies.set("ous"); //清除 session
                 state.success = true;
-                state.message = "提交成功"
+                state.message = "注销成功"
             })
         } else {
             state.success = false;

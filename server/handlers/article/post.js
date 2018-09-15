@@ -1,6 +1,6 @@
-const check = require('../methods/check')
-const update = require('../methods/update')
-const USER = require('../config').DB.COLLECTION.USER
+const check = require('../../methods/check')
+const update = require('../../methods/update')
+const USER = require('../../config').DB.COLLECTION.USER
 
 
 module.exports = async function (ctx, next) {
@@ -20,23 +20,19 @@ module.exports = async function (ctx, next) {
 
         if (temp) {
             await update(USER, [{
-                "username": body["username"],
-                "articles": {
-                    $elemMatch: {   
-                        "id": body.article.id
-                    }
-                }
+                "username": body["username"]
             },
             {
-                $set: {
-                    "articles.$.title": body.article.title,
-                    "articles.$.content" : body.article.content,
-                    "articles.$.lastModified" : timeStamp
-                }
+                $push : {"articles" : {
+                    id : Math.trunc(Math.random()*1e6),
+                    title : body.article.title, 
+                    content : body.article.content,
+                    timeStamp: timeStamp
+                }}
             }
             ]).then(r => {
                 state.success = true;
-                state.message = "修改成功"
+                state.message = "提交成功"
             })
         } else {
             state.success = false;

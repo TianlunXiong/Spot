@@ -1,6 +1,6 @@
-const check = require('../methods/check')
-const update = require('../methods/update')
-const USER = require('../config').DB.COLLECTION.USER
+const check = require('../../methods/check')
+const update = require('../../methods/update')
+const USER = require('../../config').DB.COLLECTION.USER
 const crypto = require('crypto')
 
 module.exports = async function (ctx, next) {
@@ -16,6 +16,7 @@ module.exports = async function (ctx, next) {
     let correct = false;
     let state = {};
 
+    //没有 session cookie
     if (!ctx.state.user._hasSession) {
         console.log("validating")
         await check(USER, {
@@ -62,13 +63,13 @@ module.exports = async function (ctx, next) {
             "session_code" : ctx.state.user._session
         }).then(r=>{
             if(r.length === 1){
-                // console.log("by session")
+                // session 登陆成功
                 state.success  = true;
                 state.reason = "session";
                 state.user = {
                     "e-mail" : body["e-mail"],
                     "name" : r[0]["username"],
-                    "icon" : r[0]["icon"] 
+                    "icon" : r[0]["icon"]
                 }
             }else{
                 state.reason = 'else';

@@ -1,14 +1,14 @@
 const user = require('../handlers/user')
-const article = require('../handlers/article')
+const restful = require('../handlers/restful')
 const api = require('../handlers/api')
 const pre = require('../handlers/pre')
 
 module.exports = function (router) {
-  router.post('/post', article.post)
-  router.post('/update', article.update)
-  router.post('/upload', article.upload)
-  router.post('/delete', article.delete)
-  router.get('/find', article.find)
+  router.post('/post', restful.post)
+  router.post('/update', restful.update)
+  router.post('/upload', restful.upload)
+  router.post('/delete', restful.delete)
+  router.get('/find', restful.find)
   
   router.options('*', pre.options)
   

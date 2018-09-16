@@ -196,7 +196,8 @@ export default {
             this.$store
                 .dispatch("user/posj", {
                     username: this.$store.state.user.name,
-                    article: {
+                    type: "articles",
+                    articles: {
                         title: this.title,
                         content: this.content
                     }
@@ -207,15 +208,15 @@ export default {
                             message: "发布成功",
                             type: "success",
                             center: true
-                        });
-                        this.handleCancel();
-                        this.$router.replace({ path: "/" });
+                        })
+                        this.handleCancel()
+                        this.$router.replace({ path: "/" })
                     } else {
                         this.$message({
                             message: "发布失败",
                             type: "error",
                             center: true
-                        });
+                        })
                     }
                 })
                 .catch(e => {
@@ -229,7 +230,8 @@ export default {
             this.$store
                 .dispatch("user/update", {
                     username: this.$store.state.user.name,
-                    article: {
+                    type: 'articles',
+                    articles: {
                         id: this.$store.state.user.operation.id,
                         title: this.title,
                         content: this.content

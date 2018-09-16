@@ -74,7 +74,8 @@ export default {
                     this.$store
                         .dispatch("user/delete", {
                             username: this.$store.state.user.name,
-                            article: {
+                            type: 'articles',
+                            articles: {
                                 title: row.title,
                                 id: row.id
                             }

@@ -22,7 +22,7 @@ export default {
 
     actions: {
         getArticle (context) {
-            util.getData(URL + "/find")
+            util.getData(URL + "/find?type="+"articles")
                 .then(json => {
                     context.commit("ARTICLE_ASSIGN", json.state.success ? json.state.articles : []);
                 });

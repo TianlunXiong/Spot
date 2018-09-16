@@ -1,7 +1,7 @@
 const check = require('../../methods/check')
 const update = require('../../methods/update')
 const USER = require('../../config').DB.COLLECTION.USER
-
+const LIST = require('./list')
 
 module.exports = async function (ctx, next) {
     ctx.response.type = "application/json";
@@ -19,19 +19,24 @@ module.exports = async function (ctx, next) {
         })
 
         if (temp) {
-            await update(USER, [{
-                "username": body["username"]
-            },
-            {
-                $pull : {"articles" : {
-                    id : body.article.id,
-                    title : body.article.title
-                }}
+            const has = LIST[body.type] || false
+            if(has) {
+                // console.log(pp)
+                await update(USER, [{
+                    "username": body["username"]
+                },
+                {
+                    $push : { [has] : {
+                        id : Math.trunc(Math.random()*1e6),
+                        ...body[has],
+                        timeStamp: timeStamp
+                    }}
+                }
+                ]).then(r => {
+                    state.success = true;
+                    state.message = "提交成功"
+                })
             }
-            ]).then(r => {
-                state.success = true;
-                state.message = "删除成功"
-            })
         } else {
             state.success = false;
         }

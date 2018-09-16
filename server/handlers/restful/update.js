@@ -1,7 +1,7 @@
 const check = require('../../methods/check')
 const update = require('../../methods/update')
 const USER = require('../../config').DB.COLLECTION.USER
-
+const LIST = require('./list')
 
 module.exports = async function (ctx, next) {
     ctx.response.type = "application/json";
@@ -19,25 +19,33 @@ module.exports = async function (ctx, next) {
         })
 
         if (temp) {
-            await update(USER, [{
-                "username": body["username"],
-                "articles": {
-                    $elemMatch: {   
-                        "id": body.article.id
+            const has = LIST[body.type] || false
+            let $set = {}
+            Object.keys(body[has]).forEach(key => {
+                $set[`${has}.$.${key}`] = body[has][key]
+            })
+            $set[`${has}.$.lastModified`] = timeStamp
+            if(delete $set.id) {
+                await update(USER, [{
+                    "username": body["username"],
+                    [has]: {
+                        $elemMatch: {
+                            "id": body[has].id
+                        }
+                    }
+                },
+                {
+                    $set: {
+                        ...$set
                     }
                 }
-            },
-            {
-                $set: {
-                    "articles.$.title": body.article.title,
-                    "articles.$.content" : body.article.content,
-                    "articles.$.lastModified" : timeStamp
-                }
+                ]).then(r => {
+                    state.success = true;
+                    state.message = "修改成功"
+                })
+            } else {
+                state.success = false;
             }
-            ]).then(r => {
-                state.success = true;
-                state.message = "修改成功"
-            })
         } else {
             state.success = false;
         }

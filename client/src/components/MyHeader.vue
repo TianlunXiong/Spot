@@ -8,7 +8,7 @@
                             <i class="el-icon-menu"></i>
                         </el-button>
                     </div>
-                    <span class="title" @click="showCanvasOption"  >Spot</span>
+                    <span class="title">Spot</span>
                     <el-switch style="position:absolute;top:0px;right:5px;height:40px;" :value="login" active-color="#13ce66" inactive-color="#C0CCDA" @change="notify" :disabled="isLogouting">
                     </el-switch>
                 </div>
@@ -174,9 +174,6 @@ export default {
             } else {
                 this.$store.dispatch("loginDialog", "open");
             }
-        },
-        showCanvasOption () {
-            this.$store.dispatch("canvasOption")
         }
     }
 };

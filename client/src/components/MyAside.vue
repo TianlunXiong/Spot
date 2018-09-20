@@ -19,6 +19,9 @@
                     <el-menu-item index="3-2">
                         <span>随笔</span>
                     </el-menu-item>
+                    <el-menu-item index="3-3">
+                        <span>核能发呆器</span>
+                    </el-menu-item>
                 </el-submenu>
 
                 <el-menu-item index="4" class="iconfont icon-cus-sousuo">
@@ -49,21 +52,22 @@ export default {
                 this.$router.push({ path: "/creator" });
                 break;
             case "3":
-                this.toUser().then(r => {
-                    if (r) {
-                        switch (keyPath[1]) {
-                        case "3-1":
-                            this.$router.replace({ name: "profile" });
-                            break;
-                        case "3-2":
-                            this.$router.replace({ name: "articles" });
-                            break;
-                        case "3-3":
-                            this.$router.replace({ name: "articles" });
-                            break;
+                if(keyPath[1] === "3-3"){
+                    this.$store.dispatch("canvasOption");
+                } else {
+                    this.toUser().then(r => {
+                        if (r) {
+                            switch (keyPath[1]) {
+                            case "3-1":
+                                this.$router.replace({ name: "profile" });
+                                break;
+                            case "3-2":
+                                this.$router.replace({ name: "articles" });
+                                break;
+                            }
                         }
-                    }
-                });
+                    });
+                }
                 break;
             case "4":
                 this.$store.dispatch("searchBar", "toggle");

@@ -1,5 +1,5 @@
-const check = require('../../methods/check')
-const update = require('../../methods/update')
+const check = require('../../methods/db/check')
+const update = require('../../methods/db/update')
 const USER = require('../../config').DB.COLLECTION.USER
 const LIST = require('./list')
 
@@ -21,7 +21,6 @@ module.exports = async function (ctx, next) {
         if (temp) {
             const has = LIST[body.type] || false
             if(has) {
-                // console.log(pp)
                 await update(USER, [{
                     "username": body["username"]
                 },

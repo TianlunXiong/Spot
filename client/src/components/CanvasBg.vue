@@ -1,6 +1,6 @@
 <template>
     <div class="bg-bottom">
-        <canvas style="z-index:999" ref="canvas" :width="availableWidth" :height="availableHeight" ></canvas>
+        <canvas ref="canvas" :width="availableWidth" :height="availableHeight" ></canvas>
     </div>
 </template>
 
@@ -29,21 +29,22 @@ export default {
             angle += this.$store.state.canvas.config.velocity;
             if(angle>360) angle = 0;
             drawSpirograph(ctx, 
-            this.$store.state.canvas.config.R1, 
+            this.$store.state.canvas.config.R1,
             this.$store.state.canvas.config.R2, 
-            this.$store.state.canvas.config.radius);
+            this.$store.state.canvas.config.radius,
+            this.$store.state.canvas.config.threshold);
             ctx.restore();
 
             requestAnimationFrame(draw)
         }
-        function drawSpirograph(ctx,R,r,O){
+        function drawSpirograph(ctx,R,r,O,t){
             var x1 = R-O;
             var y1 = 0;
             var i  = 1;
             ctx.beginPath();
             ctx.moveTo(x1,y1);
             do {
-                if (i>5000) break;
+                if (i > t) break;
                 var x2 = (R+r)*Math.cos(i*Math.PI/72) - (r+O)*Math.cos(((R+r)/r)*(i*Math.PI/72));
                 var y2 = (R+r)*Math.sin(i*Math.PI/72) - (r+O)*Math.sin(((R+r)/r)*(i*Math.PI/72));
                 ctx.lineTo(x2,y2);

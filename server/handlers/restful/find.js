@@ -1,4 +1,4 @@
-const check = require('../../methods/check')
+const check = require('../../methods/db/check')
 const USER = require('../../config').DB.COLLECTION.USER
 const LIST = require('./list')
 
@@ -6,7 +6,6 @@ module.exports = async function (ctx, next) {
     ctx.response.type = "application/json"
     const timeStamp = new Date().toLocaleString()
     let state = {}
-    // console.log(ctx.state.user._hasSession)
     if (ctx.state.user._hasSession) {
         await check(USER, {
             "session_code": ctx.state.user._session
@@ -21,7 +20,6 @@ module.exports = async function (ctx, next) {
                 }
             }
         })
-
     } else {
         state.success = false
     }

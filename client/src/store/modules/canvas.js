@@ -1,16 +1,17 @@
 export default {
     namespaced: true,
     state: {
-        visible: true,
+        visible: false,
         config:{
-            maxWidth: 2,
+            maxWidth: 10,
             minWidth: 0,
             x:0,
             y:0,
             R1: 521,
             R2: -265,
             radius: (window.innerHeight > window.innerWidth) ? 1.5*window.innerHeight : 1.2*window.innerWidth,
-            velocity: 0,
+            threshold: 200,
+            velocity: 0.5,
             frequency: 0, //默认 2s 为周期
             color: "gold"
         }
@@ -36,6 +37,9 @@ export default {
         },
         setRadius (context, radius) {
             context.commit("SET_RADIUS", radius);
+        },
+        setThreshold (context, val) {
+            context.commit("SET_THRESHOLD", val);
         },
         setCanvasVisible (context, value) {
             context.commit("SET_CANVAS_VISIBLE", value);
@@ -69,6 +73,9 @@ export default {
         },
         SET_RADIUS (state, radius) {
             state.config.radius = radius;
+        },
+        SET_THRESHOLD (state, val) {
+            state.config.threshold = val
         },
         SET_CANVAS_VISIBLE (state, visible) {
             state.visible = visible;

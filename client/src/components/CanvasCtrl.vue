@@ -44,6 +44,10 @@
                     <span>半径</span>
                     <el-input-number v-model="radius"  @change="setRadius" :max="2000" :min="-2000"></el-input-number>
                 </div>
+                <div class="d1">
+                    <span>绘制限</span>
+                    <el-input-number v-model="threshold"  @change="setThreshold" :max="10000" :min="0"></el-input-number>
+                </div>
                 <span>速度</span>
                 <el-slider @change="setVelocity" v-model="velocity" :min="0" :max="300" :format-tooltip="formatTooltip" show-input ></el-slider>
                 <br>
@@ -65,6 +69,7 @@ export default {
             velocity: this.$store.state.canvas.config.velocity,
             frequency: this.$store.state.canvas.config.frequency,
             radius: this.$store.state.canvas.config.radius,
+            threshold: this.$store.state.canvas.config.threshold,
             responseWidth : (window.innerWidth < 900)? "98%": "50%",
             showWarning: (window.innerWidth < 900)? true : false
         }
@@ -95,6 +100,9 @@ export default {
         },
         setRadius (value) {
             this.$store.dispatch("canvas/setRadius",value)
+        },
+        setThreshold (value) {
+            this.$store.dispatch("canvas/setThreshold", value)
         },
         toggleCanvas (value) {
             this.$store.dispatch("canvas/setCanvasVisible",value)

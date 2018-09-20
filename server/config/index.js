@@ -1,5 +1,5 @@
 module.exports = {
-    PORT: 8082,
+    PORT: 8080,
     DB: {
         COLLECTION: {
             "USER": "USER",

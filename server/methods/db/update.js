@@ -1,4 +1,4 @@
-const db = require('../db')
+const db = require('../../db')
 
 module.exports = function update(collection,filter){
     return new Promise((res,rej)=>{

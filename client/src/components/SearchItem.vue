@@ -98,7 +98,10 @@ export default {
                 })
                 .then(() => {
                     this.isLoading = false;
-                });
+                })
+                .catch(e =>{
+                    this.isLoading = false;
+                })
         },
 
         handlePrev (curr) {

@@ -21,7 +21,6 @@
                     鄂ICP备18019999号
                 </div>
             </el-footer>
-            
         </el-container>
         <transition name="el-fade-in">
             <el-button v-show="topBar" @click="scrollToTop" class="el-icon-caret-top" style="position:fixed;bottom:5px;right:28px;border:none;padding:3px 20px;background-color:rgba(255,255,255,0)"></el-button>

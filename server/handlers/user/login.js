@@ -1,5 +1,5 @@
-const check = require('../../methods/check')
-const update = require('../../methods/update')
+const check = require('../../methods/db/check')
+const update = require('../../methods/db/update')
 const USER = require('../../config').DB.COLLECTION.USER
 const crypto = require('crypto')
 

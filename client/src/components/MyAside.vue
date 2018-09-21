@@ -23,9 +23,11 @@
                         <span>核能发呆器</span>
                     </el-menu-item>
                 </el-submenu>
-
                 <el-menu-item index="4" class="iconfont icon-cus-sousuo">
                         发现
+                </el-menu-item>
+                <el-menu-item index="5" class="iconfont icon-cus-sousuo">
+                        聊天室
                 </el-menu-item>
             </el-menu>
         </el-col>
@@ -72,6 +74,10 @@ export default {
             case "4":
                 this.$store.dispatch("searchBar", "toggle");
                 this.$router.push({name: "search"});
+                break;
+            case "5":
+                window.open("https:/spotline.top/ws", "chatRoom")
+                break;
             }
             this.$store.dispatch("aside", "toggle");
         },

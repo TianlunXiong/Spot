@@ -32,6 +32,9 @@ module.exports = async function (ctx, next) {
                 ctx.req.on('end', () => {
                     let buffer = Buffer.concat(chucks, size)
                     path = `${username}/images/${crypto.createHash('md5').update(buffer).digest('hex')}.${type.split('/')[1]}`
+                    if(!fs.existsSync(`./static/${username}`)){
+                        fs.mkdirSync(`./static/${username}`)
+                    }
                     if(!fs.existsSync(`./static/${username}/images`)){
                         fs.mkdirSync(`./static/${username}/images`)
                     }
